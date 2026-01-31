@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteThePoint</title>
+    <meta name="description" content="A lightweight, local-first note-taking app with command-line style entry. No login required, data stays in your browser. Features dark mode, categorization, and fast search.">
+    <meta name="keywords" content="note taking, privacy focused, local storage, command line interface, productivity tool, fast notes, simple notes, dark mode">
+    <meta name="author" content="Note The Point">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://notethepoint.online/">
+    <meta property="og:title" content="Note The Point - Fast, Local, Privacy-Focused Note Taking">
+    <meta property="og:description" content="A lightweight, local-first note-taking app with command-line style entry. No login required, data stays in your browser.">
+    <meta property="og:image" content="https://notethepoint.online/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://notethepoint.online/">
+    <meta property="twitter:title" content="Note The Point - Fast, Local, Privacy-Focused Note Taking">
+    <meta property="twitter:description" content="A lightweight, local-first note-taking app with command-line style entry. No login required, data stays in your browser.">
+    <meta property="twitter:image" content="https://notethepoint.online/og-image.png">
+
+    <link rel="canonical" href="https://notethepoint.online/">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Note The Point",
+      "url": "https://notethepoint.online/",
+      "description": "A lightweight, local-first note-taking app with command-line style entry.",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #f7f7f7; /* Slightly darker bg to make cards pop */
+            --card-bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #888888;
+            --text-accent: #666666;
+            --border: #e0e0e0;
+            --note-border: #f0f0f0;
+            --input-bg: rgba(255, 255, 255, 0.95);
+            --dropdown-bg: #ffffff;
+            --hover-bg: #f4f4f4;
+            --hint-bg: rgba(255,255,255,0.8);
+            --hint-text: #aaa;
+            --count-bg: #eaeaea;
+            --count-text: #333333;
+            --font-stack: 'Inter', sans-serif;
+        }
+
+        body.dark-theme {
+            --bg: #111111;
+            --card-bg: #1e1e1e;
+            --text-main: #eeeeee;
+            --text-muted: #aaaaaa;
+            --text-accent: #888888;
+            --border: #333333;
+            --note-border: #2a2a2a;
+            --input-bg: rgba(30, 30, 30, 0.95);
+            --dropdown-bg: #1e1e1e;
+            --hover-bg: #333333;
+            --hint-bg: rgba(30,30,30,0.8);
+            --hint-text: #666;
+            --count-bg: #333333;
+            --count-text: #eeeeee;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Branding Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .brand-header .brand-accent {
+            color: var(--text-accent);
+            font-weight: 400;
+        }
+
+        /* Layout Containers */
+        .main-wrapper {
+            width: 90%;
+            max-width: 1400px; /* Much wider max-width */
+            margin: 0 auto;
+        }
+
+        .input-container {
+            max-width: 600px; /* Input stays focused size */
+            margin: 0 auto 50px auto;
+            position: relative;
+            z-index: 100;
+        }
+
+        /* Input Styling */
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 24px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50px;
+            outline: none;
+            font-size: 1.1rem;
+            background: var(--input-bg);
+            color: var(--text-main);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            font-family: var(--font-stack);
+        }
+
+        input[type="text"]:focus {
+            border-color: #333;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown Styling */
+        #dropdown {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            right: 20px;
+            background: var(--dropdown-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: none;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideDown 0.15s ease-out;
+            z-index: 101;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-item.selected, .dropdown-item:hover {
+            background: var(--hover-bg);
+            color: var(--text-main);
+        }
+
+        .dropdown-item span.count {
+            font-size: 0.75rem;
+            background: var(--count-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--count-text);
+        }
+
+        /* Perfect Symmetric Layout */
+        #notesContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Ensures "Pyramid" growth from center */
+            gap: 24px;
+            max-width: 1400px; /* Accommodates 3 x 450px + gaps */
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Card Styling */
+        .category-group {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            
+            /* STRICT Fixed Width - Increased to 450px */
+            flex: 0 0 450px;
+            width: 450px;
+            
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-group:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            /* background set dynamically */
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 0;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .note-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .note-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--note-border);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .note-item:last-child {
+            border-bottom: none;
+        }
+
+        .note-text {
+            word-break: break-word; /* Prevents long words breaking layout */
+            color: var(--text-main);
+            padding-left: 18px;
+            position: relative;
+            outline: none; /* Remove default focus outline */
+            cursor: text;
+        }
+
+        .note-text:focus {
+            background: rgba(0,0,0,0.03); /* Subtle highlight when editing */
+            border-radius: 4px;
+        }
+
+        .note-text::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #bbb;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            opacity: 0;
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            margin-left: 10px;
+            padding: 0 4px;
+            transition: color 0.2s;
+        }
+
+        .category-group:hover .delete-btn {
+            opacity: 0.5;
+        }
+
+        .delete-btn:hover,
+        .delete-btn:focus {
+            color: #e63946;
+            opacity: 1 !important;
+        }
+
+        /* Header Actions */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--border); /* Subtle by default */
+            transition: all 0.2s;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:hover {
+            color: var(--text-main);
+            transform: scale(1.1);
+        }
+
+        .header-btn.pinned {
+            color: var(--text-main);
+        }
+
+        .delete-cat-btn:hover {
+            color: #e63946;
+        }
+
+        /* Accessibility Focus Styles */
+        button:focus-visible, 
+        .note-text:focus-visible,
+        .theme-toggle:focus-visible {
+            outline: 2px solid var(--text-main);
+            outline-offset: 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 100px;
+            font-size: 1rem;
+            grid-column: 1 / -1; /* Spans full width if empty */
+        }
+
+        .tab-hint {
+            position: absolute;
+            right: 25px;
+            top: 18px;
+            font-size: 0.75rem;
+            color: var(--hint-text);
+            pointer-events: none;
+            display: none;
+            background: var(--hint-bg);
+            padding-left: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2000;
+            pointer-events: none; /* Let clicks pass through container */
+        }
+
+        .toast {
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2); /* Stronger shadow for visibility */
+            border: 1px solid var(--border); /* Subtle border */
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: auto;
+            min-width: 300px;
+            justify-content: space-between;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast button {
+            background: none;
+            border: none;
+            color: var(--text-accent); /* Distinct from main text */
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .toast button:hover {
+            color: var(--text-main);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1450px) {
+            #notesContainer {
+                max-width: 950px; /* Force 2 columns (2*450 + 24) */
+            }
+        }
+
+        @media (max-width: 980px) {
+            #notesContainer {
+                max-width: 500px; /* Force 1 column */
+            }
+        }
+
+        @media (max-width: 500px) {
+            #notesContainer { width: 100%; padding: 0 10px; }
+            .category-group {
+                width: 100%; /* Fluid on very small screens */
+                flex: 1 1 auto;
+            }
+            .brand-header { font-size: 1.2rem; }
+            .main-wrapper { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+</button>
+
+<main class="main-wrapper">
+    <h1 class="brand-header">
+        note<span class="brand-accent">the</span>point.online
+    </h1>
+
+    <div class="input-container">
+        <input type="text" id="noteInput" placeholder="Type a note... or start with /category" aria-label="Create a new note or search" autocomplete="off" autofocus>
+        <div id="tabHint" class="tab-hint">Press TAB</div>
+        <div id="dropdown" role="listbox"></div>
+    </div>
+    
+    <div id="notesContainer"></div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    const noteInput = document.getElementById('noteInput');
+    const dropdown = document.getElementById('dropdown');
+    const notesContainer = document.getElementById('notesContainer');
+    const tabHint = document.getElementById('tabHint');
+    const toastContainer = document.getElementById('toastContainer');
+
+    // Theme Logic
+    const savedTheme = localStorage.getItem('notethepoint-theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        updateThemeIcon(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark-theme');
+        localStorage.setItem('notethepoint-theme', isDark ? 'dark' : 'light');
+        updateThemeIcon(isDark);
+    });
+
+    function updateThemeIcon(isDark) {
+        // Simple moon/sun toggle
+        themeToggle.innerHTML = isDark 
+            ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>'
+            : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    }
+
+    let notes = [];
+    let categoryMeta = {}; // Stores metadata like { "work": { pinned: true, pinnedAt: 12345 } }
+
+    try {
+        notes = JSON.parse(localStorage.getItem('notethepoint-data')) || [];
+        categoryMeta = JSON.parse(localStorage.getItem('notethepoint-category-meta')) || {};
+    } catch (e) {
+        console.error("Failed to parse data from local storage", e);
+        notes = [];
+        categoryMeta = {};
+    }
+
+    let selectedIdx = 0;
+    let currentMatches = [];
+
+    function getCategoryColor(category) {
+        let hash = 2166136261; // FNV-1a offset basis
+        for (let i = 0; i < category.length; i++) {
+            hash ^= category.charCodeAt(i);
+            hash = Math.imul(hash, 16777619); // FNV-1a prime
+        }
+        const hue = Math.abs(hash % 360);
+        return `hsl(${hue}, 65%, 45%)`; // Saturated, readable against white
+    }
+
+    function getGroupedNotes(filterText = "") {
+        const filteredNotes = filterText 
+            ? notes.filter(n => n.text.toLowerCase().includes(filterText.toLowerCase()))
+            : notes;
+
+        return filteredNotes.reduce((acc, n) => {
+            (acc[n.category] = acc[n.category] || []).push(n);
+            return acc;
+        }, {});
+    }
+
+    function saveAndRender(filterText = "") {
+        localStorage.setItem('notethepoint-data', JSON.stringify(notes));
+        localStorage.setItem('notethepoint-category-meta', JSON.stringify(categoryMeta));
+        renderNotes(filterText);
+    }
+
+    function renderNotes(filterText = "") {
+        notesContainer.innerHTML = '';
+        const groups = getGroupedNotes(filterText);
+        let categories = Object.keys(groups);
+
+        // Sort: 
+        // 1. Pinned Categories (Sorted by pinnedAt ASC - "First pinned on top")
+        // 2. Unpinned Categories (Sorted by newest note ID DESC)
+        categories.sort((a, b) => {
+            const metaA = categoryMeta[a] || {};
+            const metaB = categoryMeta[b] || {};
+            
+            if (metaA.pinned && !metaB.pinned) return -1;
+            if (!metaA.pinned && metaB.pinned) return 1;
+            
+            if (metaA.pinned && metaB.pinned) {
+                return (metaA.pinnedAt || 0) - (metaB.pinnedAt || 0);
+            }
+
+            // Both unpinned: recent activity first
+            const minTimeA = Math.min(...groups[a].map(n => n.id));
+            const minTimeB = Math.min(...groups[b].map(n => n.id));
+            return minTimeB - minTimeA; 
+        });
+
+        if (categories.length === 0) {
+            notesContainer.innerHTML = filterText 
+                ? `<div class="empty-state"><p>No notes found matching "<b>${filterText}</b>"</p></div>`
+                : `<div class="empty-state">
+                    <p>It's quiet here.</p>
+                    <p>Type <b>/work</b> or <b>/ideas</b> to start organizing.</p>
+                </div>`;
+            return;
+        }
+
+        categories.forEach(cat => {
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'category-group';
+            
+            const color = getCategoryColor(cat);
+            const isPinned = categoryMeta[cat] && categoryMeta[cat].pinned;
+            
+            const pinSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg);"><path d="M16 12V4h1V2H7v2h1v8l-2.5 5h5.5v5h2v-5h5.5L16 12z"></path></svg>`;
+
+            const header = document.createElement('div');
+            header.className = 'group-header';
+
+            header.innerHTML = `
+                <h2 class="category-header" style="background: ${color}; margin: 0; font-size: 0.75rem;">${cat}</h2>
+                <div class="header-actions">
+                    <button class="header-btn ${isPinned ? 'pinned' : ''}" onclick="toggleCategoryPin('${cat}')" aria-label="${isPinned ? 'Unpin category ' + cat : 'Pin category ' + cat}" title="${isPinned ? 'Unpin Card' : 'Pin Card'}">
+                        ${pinSvg}
+                    </button>
+                    <button class="header-btn delete-cat-btn" onclick="deleteCategory('${cat}')" aria-label="Delete category ${cat}" title="Clear all notes in ${cat}">&times;</button>
+                </div>
+            `;
+            groupDiv.appendChild(header);
+
+            const noteList = document.createElement('ul');
+            noteList.className = 'note-list';
+
+            groups[cat].forEach(n => {
+                const noteItem = document.createElement('li');
+                noteItem.className = 'note-item';
+                noteItem.innerHTML = `
+                    <span class="note-text" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Edit note" onblur="updateNoteText(${n.id}, this.innerText)">${n.text}</span>
+                    <button class="delete-btn" onclick="deleteNote(${n.id})" aria-label="Delete note" title="Delete">&times;</button>
+                `;
+                noteList.appendChild(noteItem);
+            });
+            
+            groupDiv.appendChild(noteList);
+
+            notesContainer.appendChild(groupDiv);
+        });
+    }
+
+    function updateNoteText(id, newText) {
+        const note = notes.find(n => n.id === id);
+        if (note && newText.trim() !== "") {
+            note.text = newText.trim();
+            saveAndRender(); 
+        } else if (note && newText.trim() === "") {
+            deleteNote(id);
+        }
+    }
+
+    function toggleCategoryPin(cat) {
+        if (!categoryMeta[cat]) categoryMeta[cat] = {};
+        
+        categoryMeta[cat].pinned = !categoryMeta[cat].pinned;
+        if (categoryMeta[cat].pinned) {
+            categoryMeta[cat].pinnedAt = Date.now();
+        } else {
+            delete categoryMeta[cat].pinnedAt;
+        }
+        saveAndRender();
+    }
+
+    function deleteCategory(cat) {
+        const deletedNotes = notes.filter(n => n.category === cat);
+        notes = notes.filter(n => n.category !== cat);
+        saveAndRender();
+
+        showToast(`Category <b>#${cat}</b> deleted`, () => {
+            notes.push(...deletedNotes);
+            saveAndRender();
+        });
+    }
+
+    function deleteNote(id) {
+        const noteIdx = notes.findIndex(n => n.id === id);
+        if (noteIdx > -1) {
+            const deletedNote = notes[noteIdx];
+            notes.splice(noteIdx, 1);
+            saveAndRender();
+
+            showToast(`Note deleted`, () => {
+                notes.push(deletedNote);
+                saveAndRender();
+            });
+        }
+    }
+
+    function showToast(message, onUndo) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.setAttribute('role', 'status');
+        toast.innerHTML = `
+            <span>${message}</span>
+            <button id="undoBtn">Undo</button>
+        `;
+        
+        toast.querySelector('#undoBtn').addEventListener('click', () => {
+            onUndo();
+            toast.remove();
+        });
+
+        toastContainer.appendChild(toast);
+
+        // Remove after 4 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 4000);
+    }
+
+    function updateDropdown() {
+        const val = noteInput.value;
+
+        // Search Mode
+        if (val.startsWith('?')) {
+            dropdown.style.display = 'none';
+            tabHint.style.display = 'none';
+            const query = val.substring(1).trim();
+            renderNotes(query);
+            return;
+        }
+
+        // Restore normal view if search is cleared
+        if (!val.startsWith('?')) {
+            renderNotes(""); // Clear filter
+        }
+
+        if (val.startsWith('/') && !val.includes(' ')) {
+            const query = val.substring(1).toLowerCase();
+            const groups = getGroupedNotes();
+            const allCats = Object.keys(groups);
+            
+            currentMatches = allCats.filter(c => c.startsWith(query));
+
+            if (currentMatches.length > 0) {
+                dropdown.style.display = 'block';
+                tabHint.style.display = 'block';
+                
+                dropdown.innerHTML = currentMatches.map((cat, i) => {
+                    const count = groups[cat].length;
+                    const color = getCategoryColor(cat);
+                    const isSelected = i === selectedIdx;
+                    return `
+                        <div class="dropdown-item ${isSelected ? 'selected' : ''}" role="option" aria-selected="${isSelected}" onclick="selectByClick(${i})">
+                            <span style="display: flex; align-items: center; pointer-events: none;">
+                                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${color}; margin-right: 10px;"></span>
+                                # ${cat}
+                            </span>
+                            <span class="count" style="pointer-events: none;">${count}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                dropdown.style.display = 'none';
+                tabHint.style.display = 'none';
+            }
+        } else {
+            dropdown.style.display = 'none';
+            tabHint.style.display = 'none';
+        }
+    }
+
+    function selectByClick(idx) {
+        selectedIdx = idx;
+        autoComplete();
+        noteInput.focus();
+    }
+
+    function autoComplete() {
+        if (currentMatches.length > 0) {
+            noteInput.value = '/' + currentMatches[selectedIdx] + ' ';
+            dropdown.style.display = 'none';
+            tabHint.style.display = 'none';
+        }
+    }
+
+    noteInput.addEventListener('input', () => {
+        selectedIdx = 0;
+        updateDropdown();
+    });
+
+    noteInput.addEventListener('keydown', (e) => {
+        if (dropdown.style.display === 'block') {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                autoComplete();
+            } else if (e.key === 'Enter') {
+                if (noteInput.value.split(' ').length === 1) {
+                    e.preventDefault();
+                    autoComplete();
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIdx = (selectedIdx + 1) % currentMatches.length;
+                updateDropdown();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIdx = (selectedIdx - 1 + currentMatches.length) % currentMatches.length;
+                updateDropdown();
+            }
+        } 
+        
+        if (e.key === 'Enter') {
+            const val = noteInput.value.trim();
+            
+            // Block 'Enter' if in search mode (starts with ?) to prevent accidental note creation
+            if (val.startsWith('?')) {
+                return;
+            }
+
+            if (val && (dropdown.style.display === 'none' || val.includes(' '))) {
+                let category = 'general';
+                let text = val;
+
+                if (val.startsWith('/')) {
+                    const parts = val.split(' ');
+                    if (parts.length < 2) return;
+                    category = parts[0].substring(1);
+                    text = parts.slice(1).join(' ');
+                }
+
+                if(text) {
+                    notes.unshift({ id: Date.now(), category: category.toLowerCase(), text: text });
+                    saveAndRender();
+                    noteInput.value = '';
+                    updateDropdown();
+                }
+            }
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!noteInput.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+            tabHint.style.display = 'none';
+        }
+    });
+
+    renderNotes();
+</script>
+
+</body>
+</html>
