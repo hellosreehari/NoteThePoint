@@ -216,6 +216,23 @@
             color: var(--count-text);
         }
 
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
         /* Perfect Symmetric Layout */
         #notesContainer {
             display: flex;
@@ -239,15 +256,21 @@
             
             box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 15px rgba(0,0,0,0.03);
             border: 1px solid rgba(0,0,0,0.04);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             
             display: flex;
             flex-direction: column;
         }
 
+        /* Animation Entry - Only on first load */
+        .category-group.initial-load {
+            animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+            animation-delay: calc(var(--i) * 0.05s); /* Stagger effect */
+        }
+
         .category-group:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
         }
 
         .category-header {
@@ -284,6 +307,7 @@
             border-bottom: 1px solid var(--note-border);
             font-size: 0.95rem;
             line-height: 1.5;
+            transition: background-color 0.2s;
         }
 
         .note-item:last-child {
@@ -297,6 +321,7 @@
             position: relative;
             outline: none; /* Remove default focus outline */
             cursor: text;
+            flex-grow: 1;
         }
 
         .note-text:focus {
@@ -322,11 +347,13 @@
             line-height: 1;
             margin-left: 10px;
             padding: 0 4px;
-            transition: color 0.2s;
+            transform: translateX(10px);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .category-group:hover .delete-btn {
-            opacity: 0.5;
+        .note-item:hover .delete-btn {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .delete-btn:hover,
@@ -521,6 +548,11 @@
     }
 
     themeToggle.addEventListener('click', () => {
+        // Trigger Pop Animation
+        themeToggle.style.animation = 'none';
+        themeToggle.offsetHeight; /* trigger reflow */
+        themeToggle.style.animation = 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+
         const isDark = document.body.classList.toggle('dark-theme');
         localStorage.setItem('notethepoint-theme', isDark ? 'dark' : 'light');
         updateThemeIcon(isDark);
@@ -567,6 +599,8 @@
 
     let selectedIdx = 0;
     let currentMatches = [];
+    let isSearchActive = false;
+    let isFirstRender = true;
 
     function getCategoryColor(category) {
         let hash = 2166136261; // FNV-1a offset basis
@@ -579,8 +613,12 @@
     }
 
     function getGroupedNotes(filterText = "") {
+        const query = filterText.toLowerCase();
         const filteredNotes = filterText 
-            ? notes.filter(n => n.text.toLowerCase().includes(filterText.toLowerCase()))
+            ? notes.filter(n => 
+                n.text.toLowerCase().includes(query) || 
+                n.category.toLowerCase().includes(query)
+            )
             : notes;
 
         return filteredNotes.reduce((acc, n) => {
@@ -630,9 +668,10 @@
             return;
         }
 
-        categories.forEach(cat => {
+        categories.forEach((cat, index) => {
             const groupDiv = document.createElement('div');
-            groupDiv.className = 'category-group';
+            groupDiv.className = 'category-group' + (isFirstRender ? ' initial-load' : '');
+            groupDiv.style.setProperty('--i', index);
             
             const color = getCategoryColor(cat);
             const isPinned = categoryMeta[cat] && categoryMeta[cat].pinned;
@@ -670,6 +709,8 @@
 
             notesContainer.appendChild(groupDiv);
         });
+
+        isFirstRender = false;
     }
 
     function updateNoteText(id, newText) {
@@ -754,12 +795,14 @@
             tabHint.style.display = 'none';
             const query = val.substring(1).trim();
             renderNotes(query);
+            isSearchActive = true;
             return;
         }
 
         // Restore normal view if search is cleared
-        if (!val.startsWith('?')) {
+        if (!val.startsWith('?') && isSearchActive) {
             renderNotes(""); // Clear filter
+            isSearchActive = false;
         }
 
         if (val.startsWith('/') && !val.includes(' ')) {
