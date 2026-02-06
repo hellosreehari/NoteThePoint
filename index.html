@@ -473,7 +473,7 @@
         }
     </style>
 </head>
-<body>
+<body class="dark-theme">
 
 <script>
     // Redirect HTTP to HTTPS
@@ -509,9 +509,13 @@
     const tabHint = document.getElementById('tabHint');
     const toastContainer = document.getElementById('toastContainer');
 
-    // Theme Logic
+    // Theme Logic - Default to dark
     const savedTheme = localStorage.getItem('notethepoint-theme');
-    if (savedTheme === 'dark') {
+    if (savedTheme === 'light') {
+        document.body.classList.remove('dark-theme');
+        updateThemeIcon(false);
+    } else {
+        // Default or explicitly dark
         document.body.classList.add('dark-theme');
         updateThemeIcon(true);
     }
@@ -533,8 +537,28 @@
     let categoryMeta = {}; // Stores metadata like { "work": { pinned: true, pinnedAt: 12345 } }
 
     try {
-        notes = JSON.parse(localStorage.getItem('notethepoint-data')) || [];
-        categoryMeta = JSON.parse(localStorage.getItem('notethepoint-category-meta')) || {};
+        const storedNotes = localStorage.getItem('notethepoint-data');
+        if (storedNotes) {
+            notes = JSON.parse(storedNotes);
+        } else {
+            // First-time user experience: Default tutorial notes
+            const now = Date.now();
+            notes = [
+                { id: now, category: "welcome", text: "👋 Welcome! This app is fast, private, and local-first." },
+                { id: now + 1, category: "welcome", text: "To categorize, use a slash: /work Finish report. Otherwise, notes go to /general." },
+                { id: now + 2, category: "tips", text: "Press '/' to focus the input, or '?' to search all your notes." },
+                { id: now + 3, category: "tips", text: "Pin 📌 cards to the top, or click any note to edit it." }
+            ];
+            // Initialize metadata for the tutorial categories
+            categoryMeta = {
+                "welcome": { pinned: true, pinnedAt: now },
+                "tips": { pinned: true, pinnedAt: now + 1 }
+            };
+            localStorage.setItem('notethepoint-category-meta', JSON.stringify(categoryMeta));
+            localStorage.setItem('notethepoint-data', JSON.stringify(notes));
+        }
+
+        categoryMeta = JSON.parse(localStorage.getItem('notethepoint-category-meta')) || categoryMeta;
     } catch (e) {
         console.error("Failed to parse data from local storage", e);
         notes = [];
@@ -838,6 +862,21 @@
                     noteInput.value = '';
                     updateDropdown();
                 }
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        // Global shortcut: '/' to focus input
+        if (e.key === '/' && document.activeElement !== noteInput) {
+            // Don't trigger if user is editing a note or using another input
+            const isEditing = document.activeElement.isContentEditable || 
+                              document.activeElement.tagName === 'INPUT' || 
+                              document.activeElement.tagName === 'TEXTAREA';
+            
+            if (!isEditing) {
+                e.preventDefault();
+                noteInput.focus();
             }
         }
     });
