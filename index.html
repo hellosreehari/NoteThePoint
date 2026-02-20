@@ -127,6 +127,7 @@
             background: var(--bg-main);
             min-width: 0;
             position: relative;
+            overflow-y: auto;
         }
 
         /* --- Sidebar Header --- */
@@ -427,7 +428,6 @@
             font-family: var(--font-serif);
             position: relative;
             white-space: pre-wrap;
-            overflow-y: auto;
             word-wrap: break-word;
         }
 
@@ -869,7 +869,7 @@
 </div>
 
 <!-- Main Editor Area -->
-<div id="editor-area" class="editor-area">
+<div id="editor-area" class="editor-area custom-scrollbar">
 
     <!-- Active Note View -->
     <div id="active-note-view" class="active-note-view" style="display: none;">
