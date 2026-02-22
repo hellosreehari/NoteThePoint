@@ -10,6 +10,24 @@
 
         gtag('config', 'G-HHEPJNNV42');
     </script>
+    <!-- Google tag (gtag.js) event - delayed navigation helper -->
+    <script>
+      // Helper function to delay opening a URL until a gtag event is sent.
+      // Call it in response to an action that should navigate to a URL.
+      function gtagSendEvent(url) {
+        var callback = function () {
+          if (typeof url === 'string') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'create_a_note', {
+          'event_callback': callback,
+          'event_timeout': 2000,
+          // <event_parameters>
+        });
+        return false;
+      }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoteThePoint | Free Online Notepad</title>
@@ -1180,6 +1198,7 @@
     }
 
     window.handleAddNote = function() {
+        gtagSendEvent();
         const newNote = {
             id: Date.now().toString() + Math.random().toString(36).substring(2),
             title: '',
@@ -1337,6 +1356,16 @@
         if (noteIndex > -1) {
             notes[noteIndex][field] = value;
             notes[noteIndex].lastModified = Date.now();
+
+            const note = notes[noteIndex];
+            const content = (note.content || '').trim();
+            const isContentEmpty = content === '' || content === '<p><br></p>' || content === '<p></p>';
+
+            if (note.title.trim() !== '' && !isContentEmpty && !note.hasBeenTracked) {
+                gtagSendEvent();
+                notes[noteIndex].hasBeenTracked = true;
+            }
+
             saveData();
             renderSidebar();
             els.lastEdited.textContent = `Edited ${formatDate(notes[noteIndex].lastModified)}`;
