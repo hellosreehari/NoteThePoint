@@ -300,18 +300,6 @@
             color: var(--text-main);
         }
 
-        .sidebar-blog-link-header {
-            font-size: 13px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            margin-left: 4px;
-        }
-
-        .sidebar-blog-link-header:hover {
-            color: var(--text-main);
-        }
-
         .empty-notes {
             padding: 32px;
             text-align: center;
@@ -941,12 +929,11 @@
     <!-- Sidebar Header -->
     <div class="sidebar-header">
         <div class="sidebar-top">
-            <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center;">
                 <button onclick="toggleSidebar()" class="icon-btn sidebar-close-btn" title="Collapse Sidebar">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>
                 <h1 class="sidebar-title">notethepoint<span class="tld">.online</span></h1>
-                <a href="blog/" class="sidebar-blog-link-header">Blog</a>
             </div>
             <div style="display: flex; gap: 4px;">
                 <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
