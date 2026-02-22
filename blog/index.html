@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools from NoteThePoint.">
+    <meta name="theme-color" content="#242424">
+    <link rel="canonical" href="https://notethepoint.online/blog/">
+    <title>Blog | NoteThePoint</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="Blog | NoteThePoint">
+    <meta property="og:description" content="Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools.">
+    <meta property="og:url" content="https://notethepoint.online/blog/">
+    <meta property="og:type" content="website">
+    <style>
+        :root {
+            --bg-main: #ffffff;
+            --bg-sidebar: #fafafa;
+            --border-color: #f0f0f0;
+            --text-main: #242424;
+            --text-muted: #6b6b6b;
+            --text-light: #d4d4d4;
+            --accent-hover: #f5f5f5;
+            --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.1);
+            --note-title-color: #525252;
+            --btn-primary-bg: #242424;
+            --btn-primary-text: #ffffff;
+            --btn-primary-hover: #262626;
+            --selection-bg: #e5e5e5;
+            --selection-text: #171717;
+            --font-sans: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-serif: source-serif-pro, Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+        }
+        body.dark-theme {
+            --bg-main: #121212;
+            --bg-sidebar: #1a1a1a;
+            --border-color: #2e2e2e;
+            --text-main: #e5e5e5;
+            --text-muted: #a3a3a3;
+            --text-light: #525252;
+            --accent-hover: #262626;
+            --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.8);
+            --note-title-color: #d4d4d4;
+            --btn-primary-bg: #e5e5e5;
+            --btn-primary-text: #121212;
+            --btn-primary-hover: #d4d4d4;
+            --selection-bg: #3b3b3b;
+            --selection-text: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection {
+            background: var(--selection-bg);
+            color: var(--selection-text);
+        }
+        .blog-container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+        .blog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+        }
+        .blog-logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+        .blog-logo .tld { color: var(--text-muted); font-weight: 400; }
+        .blog-nav {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .blog-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .blog-nav a:hover { color: var(--text-main); }
+        .blog-nav .cta {
+            background: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .blog-nav .cta:hover {
+            background: var(--btn-primary-hover);
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-btn:hover {
+            color: var(--text-main);
+            background: var(--accent-hover);
+        }
+        .blog-title {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        .blog-intro {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.58;
+            margin-bottom: 48px;
+        }
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .post-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            padding: 16px 24px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            background: transparent;
+            transition: all 0.2s;
+        }
+        .post-card:hover {
+            background: var(--accent-hover);
+            border-color: var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+        .post-date {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .post-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            color: var(--note-title-color);
+        }
+        .post-card:hover .post-title {
+            color: var(--text-main);
+        }
+        .post-excerpt {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-family: var(--font-serif);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-container">
+        <header class="blog-header">
+            <a href="../" class="blog-logo">notethepoint<span class="tld">.online</span></a>
+            <nav class="blog-nav">
+                <a href="../">Notepad</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
+                    <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <a href="../" class="cta">Start writing</a>
+            </nav>
+        </header>
+
+        <h1 class="blog-title">Blog</h1>
+        <p class="blog-intro">Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools.</p>
+
+        <div class="post-list">
+            <a href="best-free-online-notepad-2026.html" class="post-card">
+                <div class="post-date">February 2026</div>
+                <h2 class="post-title">Best Free Online Notepad in 2026</h2>
+                <p class="post-excerpt">A roundup of the best browser-based notepads for quick notes, from minimal and privacy-first to feature-rich—and how to pick the right one.</p>
+            </a>
+            <a href="why-notes-shouldnt-need-account.html" class="post-card">
+                <div class="post-date">February 2026</div>
+                <h2 class="post-title">Why Your Notes Shouldn't Need an Account</h2>
+                <p class="post-excerpt">Most note apps demand your email before you can write a single word. Here's why that's unnecessary—and what to use instead.</p>
+            </a>
+            <a href="online-notepad-without-sign-up.html" class="post-card">
+                <div class="post-date">February 2026</div>
+                <h2 class="post-title">Online Notepad Without Sign-Up: 5 Privacy-First Options</h2>
+                <p class="post-excerpt">5 privacy-first online notepads you can use without signing up. No email, no account—just open and start typing.</p>
+            </a>
+            <a href="where-are-notes-saved-browser-vs-cloud.html" class="post-card">
+                <div class="post-date">February 2026</div>
+                <h2 class="post-title">Where Are My Notes Saved? Browser vs Cloud Storage</h2>
+                <p class="post-excerpt">A plain-language guide to browser storage vs cloud storage—and what it means for your privacy.</p>
+            </a>
+            <a href="how-to-back-up-browser-notes.html" class="post-card">
+                <div class="post-date">February 2026</div>
+                <h2 class="post-title">How to Back Up Browser Notes</h2>
+                <p class="post-excerpt">Export, copy, and protect notes from localStorage before clearing data or switching devices.</p>
+            </a>
+        </div>
+    </div>
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('minimalist_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('moon-icon').style.display = 'none';
+                document.getElementById('sun-icon').style.display = 'block';
+            }
+        }
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('minimalist_theme', isDark ? 'dark' : 'light');
+            document.getElementById('moon-icon').style.display = isDark ? 'none' : 'block';
+            document.getElementById('sun-icon').style.display = isDark ? 'block' : 'none';
+        }
+        initTheme();
+    </script>
+</body>
+</html>

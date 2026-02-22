@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Where do your notes actually go? A plain-language guide to browser storage vs cloud storage—and what it means for your privacy.">
+    <meta name="theme-color" content="#242424">
+    <link rel="canonical" href="https://notethepoint.online/blog/where-are-notes-saved-browser-vs-cloud.html">
+    <title>Where Are My Notes Saved? Browser vs Cloud Storage | NoteThePoint Blog</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="Where Are My Notes Saved? Browser vs Cloud Storage">
+    <meta property="og:description" content="A plain-language guide to browser storage vs cloud storage—and what it means for your privacy.">
+    <meta property="og:url" content="https://notethepoint.online/blog/where-are-notes-saved-browser-vs-cloud.html">
+    <meta property="og:type" content="article">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Where Are My Notes Saved? Browser vs Cloud Storage",
+      "description": "A guide to browser storage vs cloud storage for notes.",
+      "author": { "@type": "Organization", "name": "NoteThePoint" },
+      "datePublished": "2026-02-22",
+      "dateModified": "2026-02-22",
+      "publisher": { "@type": "Organization", "name": "NoteThePoint", "url": "https://notethepoint.online" }
+    }
+    </script>
+    <style>
+        :root { --bg-main: #ffffff; --bg-sidebar: #fafafa; --border-color: #f0f0f0; --text-main: #242424; --text-muted: #6b6b6b; --text-light: #d4d4d4; --accent-hover: #f5f5f5; --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.1); --btn-primary-bg: #242424; --btn-primary-text: #ffffff; --btn-primary-hover: #262626; --selection-bg: #e5e5e5; --selection-text: #171717; --font-sans: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif; --font-serif: source-serif-pro, Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif; }
+        body.dark-theme { --bg-main: #121212; --bg-sidebar: #1a1a1a; --border-color: #2e2e2e; --text-main: #e5e5e5; --text-muted: #a3a3a3; --text-light: #525252; --accent-hover: #262626; --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.8); --btn-primary-bg: #e5e5e5; --btn-primary-text: #121212; --btn-primary-hover: #d4d4d4; --selection-bg: #3b3b3b; --selection-text: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-sans); background: var(--bg-main); color: var(--text-main); min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        ::selection { background: var(--selection-bg); color: var(--selection-text); }
+        .article-container { max-width: 680px; margin: 0 auto; padding: 48px 24px; }
+        .article-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+        .article-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.04em; }
+        .article-logo a { color: var(--text-main); text-decoration: none; }
+        .article-logo .tld { color: var(--text-muted); font-weight: 400; }
+        .article-nav-links { display: flex; gap: 16px; align-items: center; }
+        .article-nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; }
+        .article-nav-links a:hover { color: var(--text-main); }
+        .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 6px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .icon-btn:hover { color: var(--text-main); background: var(--accent-hover); }
+        .article-date { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 16px; }
+        .article-title { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 24px; }
+        .article-body { font-family: var(--font-serif); font-size: 20px; color: var(--text-main); line-height: 1.58; }
+        .article-body p { margin-bottom: 1.5em; }
+        .article-body h2 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; margin-top: 2em; margin-bottom: 0.75em; }
+        .article-body h3 { font-family: var(--font-sans); font-size: 18px; font-weight: 600; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .article-body ul { margin-bottom: 1.5em; padding-left: 1.5em; }
+        .article-body li { margin-bottom: 0.5em; }
+        .article-body a { color: #3b82f6; text-decoration: underline; }
+        .article-body a:hover { text-decoration: none; }
+        .cta-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; margin: 2em 0; }
+        .cta-box .cta-link { display: inline-block; background: var(--btn-primary-bg); color: var(--btn-primary-text); padding: 10px 24px; border-radius: 99px; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .cta-box .cta-link:hover { background: var(--btn-primary-hover); }
+        .back-link { display: inline-block; color: var(--text-muted); text-decoration: none; font-size: 14px; margin-top: 48px; }
+        .back-link:hover { color: var(--text-main); }
+    </style>
+</head>
+<body>
+    <article class="article-container">
+        <nav class="article-nav">
+            <a href="../" class="article-logo">notethepoint<span class="tld">.online</span></a>
+            <div class="article-nav-links">
+                <a href="../">Notepad</a>
+                <a href="index.html">Blog</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
+                    <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </nav>
+
+        <div class="article-date">February 22, 2026</div>
+        <h1 class="article-title">Where Are My Notes Saved? Browser vs Cloud Storage</h1>
+
+        <div class="article-body">
+            <p>Before you type a single word, it helps to know where that text will live. Different note apps store data in very different places—and that affects privacy, access, and what happens if you clear your browser or lose a device.</p>
+
+            <h2>Browser storage (localStorage)</h2>
+            <p>Apps like <a href="../">NoteThePoint</a> use your browser's <strong>localStorage</strong>. Your notes are saved as data on your computer, in a folder tied to the browser and the site. They never leave your device. No server receives them, and the site's owner can't read them.</p>
+
+            <p><strong>Pros:</strong> Private, no account needed, works offline, instant. <strong>Cons:</strong> Notes stay on that specific browser and device. Clear site data, switch browsers, or use a new computer—and they're gone unless you've exported them.</p>
+
+            <h2>Cloud storage</h2>
+            <p>Apps like Google Keep, Evernote, Notion, and OneNote save notes to their servers. Your data is synced across devices and backed up by the company. To use the app, you typically sign in, so they can associate your notes with your account.</p>
+
+            <p><strong>Pros:</strong> Access from anywhere, sync across devices, recovery if you lose a phone or laptop. <strong>Cons:</strong> Your notes live on someone else's infrastructure. Privacy depends on their policies and security. They may use data for ads, AI, or analytics.</p>
+
+            <h2>Hybrid approaches</h2>
+            <p>Some apps offer both: local-first editing with optional sync. Others let you work offline and sync when you're back online. The important question is: <em>where is the source of truth?</em> If it's their server, they can read it. If it's your device, you control it.</p>
+
+            <h2>Choosing what fits</h2>
+            <p>For quick, personal notes you don't need elsewhere—scratchpads, drafts, sensitive ideas—browser storage is often the right fit. For notes you want on multiple devices or shared with others, cloud storage makes more sense. Know where your data lives, and pick accordingly.</p>
+
+            <div class="cta-box">
+                <p><strong>Local-only notepad:</strong> <a href="../" class="cta-link">NoteThePoint →</a></p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Blog</a>
+    </article>
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('minimalist_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('moon-icon').style.display = 'none';
+                document.getElementById('sun-icon').style.display = 'block';
+            }
+        }
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('minimalist_theme', isDark ? 'dark' : 'light');
+            document.getElementById('moon-icon').style.display = isDark ? 'none' : 'block';
+            document.getElementById('sun-icon').style.display = isDark ? 'block' : 'none';
+        }
+        initTheme();
+    </script>
+</body>
+</html>
