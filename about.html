@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About NoteThePoint. Learn why we built a serverless notepad and find answers to common questions about storage and privacy.">
+    <meta name="theme-color" content="#242424">
+    <link rel="canonical" href="https://notethepoint.online/about.html">
+    <title>About & FAQ | NoteThePoint</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --bg-main: #ffffff;
+            --bg-sidebar: #fafafa;
+            --border-color: #f0f0f0;
+            --text-main: #242424;
+            --text-muted: #6b6b6b;
+            --text-light: #d4d4d4;
+            --accent-hover: #f5f5f5;
+            --btn-primary-bg: #242424;
+            --btn-primary-text: #ffffff;
+            --btn-primary-hover: #262626;
+            --selection-bg: #e5e5e5;
+            --selection-text: #171717;
+            --font-sans: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-serif: source-serif-pro, Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+        }
+        body.dark-theme {
+            --bg-main: #121212;
+            --bg-sidebar: #1a1a1a;
+            --border-color: #2e2e2e;
+            --text-main: #e5e5e5;
+            --text-muted: #a3a3a3;
+            --text-light: #525252;
+            --accent-hover: #262626;
+            --btn-primary-bg: #e5e5e5;
+            --btn-primary-text: #121212;
+            --btn-primary-hover: #d4d4d4;
+            --selection-bg: #3b3b3b;
+            --selection-text: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-sans); background: var(--bg-main); color: var(--text-main); min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .container { max-width: 680px; margin: 0 auto; padding: 48px 24px; }
+        nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.04em; color: var(--text-main); text-decoration: none; }
+        .logo .tld { color: var(--text-muted); font-weight: 400; }
+        .nav-links { display: flex; gap: 16px; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; }
+        .nav-links a:hover { color: var(--text-main); }
+        .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 6px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .icon-btn:hover { color: var(--text-main); background: var(--accent-hover); }
+        h1 { font-size: 42px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 24px; }
+        .content { font-family: var(--font-serif); font-size: 18px; color: var(--text-main); }
+        .content p { margin-bottom: 1.5em; }
+        .content h2 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; margin-top: 2em; margin-bottom: 0.75em; }
+        .content h3 { font-family: var(--font-sans); font-size: 18px; font-weight: 600; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .content ul { margin-bottom: 1.5em; padding-left: 1.5em; }
+        .content li { margin-bottom: 0.5em; }
+        .content a { color: #3b82f6; text-decoration: underline; }
+        footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-color); display: flex; gap: 16px; flex-wrap: wrap; }
+        footer a { color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500; }
+        footer a:hover { color: var(--text-main); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/" class="logo">notethepoint<span class="tld">.online</span></a>
+            <div class="nav-links">
+                <a href="/">Notepad</a>
+                <a href="/blog/">Blog</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
+                    <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </nav>
+
+        <h1>About NoteThePoint</h1>
+        <div class="content">
+            <p>NoteThePoint was born out of a simple need: a place to type right now, without waiting for a heavy app to load or being forced to sign in.</p>
+            <p>We believe that tools should be fast, private, and out of your way. That's why NoteThePoint is entirely serverless—your data never leaves your device.</p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>Is it really free?</h3>
+            <p>Yes. NoteThePoint is completely free to use. No hidden subscriptions, no paid tiers.</p>
+
+            <h3>Where are my notes stored?</h3>
+            <p>Your notes are stored in your browser's <strong>Local Storage</strong>. This means they are saved on your computer or phone, and they are never sent to a server.</p>
+
+            <h3>What happens if I clear my browser history?</h3>
+            <p>If you choose to "Clear browsing data" and include "Cookies and other site data," your notes will be deleted. We recommend regularly backing up important notes by copying them to another location.</p>
+
+            <h3>Can I access my notes on another device?</h3>
+            <p>No. Since the data stays on your device, it doesn't automatically sync between your phone and your laptop. This is a trade-off we made to ensure total privacy and zero-login speed.</p>
+
+            <h3>How do I back up my notes?</h3>
+            <p>The easiest way is to use the "Copy to Clipboard" button on any note and paste it into a safe place. You can also print your notes or save them as PDFs using the print icon.</p>
+
+            <h2>Feedback & Contact</h2>
+            <p>Have a question, a bug report, or a feature request? We'd love to hear from you.</p>
+            <p>You can reach us at: <a href="mailto:hello@notethepoint.online">hello@notethepoint.online</a></p>
+            <p>Or follow our project on <a href="https://github.com/hellosreehari/NoteThePoint">GitHub</a>.</p>
+        </div>
+
+        <footer>
+            <a href="/about.html">About & FAQ</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/blog/">Blog</a>
+        </footer>
+    </div>
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('minimalist_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('moon-icon').style.display = 'none';
+                document.getElementById('sun-icon').style.display = 'block';
+            }
+        }
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('minimalist_theme', isDark ? 'dark' : 'light');
+            document.getElementById('moon-icon').style.display = isDark ? 'none' : 'block';
+            document.getElementById('sun-icon').style.display = isDark ? 'block' : 'none';
+        }
+        initTheme();
+    </script>
+</body>
+</html>
