@@ -411,6 +411,7 @@
             -webkit-box-orient: vertical;
             line-height: 1.5;
             font-family: var(--font-serif);
+            white-space: pre-line;
         }
 
         .note-item:hover .note-preview {
@@ -1158,9 +1159,11 @@
 
     // --- Formatting ---
     function stripHtml(html) {
+        if (!html) return "";
         let tmp = document.createElement("DIV");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText || "";
+        // Replace block tags with newlines to ensure separation
+        tmp.innerHTML = html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n');
+        return tmp.textContent.trim() || "";
     }
 
     function formatDate(timestamp) {
