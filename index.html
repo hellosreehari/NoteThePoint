@@ -290,14 +290,16 @@
         }
 
         .sidebar-blog-link {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
+            opacity: 0.8;
         }
 
         .sidebar-blog-link:hover {
             color: var(--text-main);
+            opacity: 1;
         }
 
         .empty-notes {
@@ -955,13 +957,11 @@
 
     <!-- Sidebar Footer -->
     <div class="sidebar-footer">
-        <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <a href="blog/" class="sidebar-blog-link">Blog</a>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <a href="about.html" class="sidebar-blog-link" style="font-size: 11px; opacity: 0.8;">About & FAQ</a>
-                <a href="privacy.html" class="sidebar-blog-link" style="font-size: 11px; opacity: 0.8;">Privacy</a>
-                <a href="terms.html" class="sidebar-blog-link" style="font-size: 11px; opacity: 0.8;">Terms</a>
-            </div>
+            <a href="about.html" class="sidebar-blog-link">About & FAQ</a>
+            <a href="privacy.html" class="sidebar-blog-link">Privacy</a>
+            <a href="terms.html" class="sidebar-blog-link">Terms</a>
         </div>
     </div>
 </div>
