@@ -38,6 +38,13 @@
     <link rel="canonical" href="https://notethepoint.online/">
     <title>NoteThePoint | Free Online Notepad</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
+    <!-- Quill library -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- IndexedDB Wrapper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 
     <!-- Open Graph -->
     <meta property="og:title" content="NoteThePoint | Free Online Notepad">
@@ -381,7 +388,7 @@
         .sidebar-delete-btn {
             background: transparent;
             border: none;
-            color: var(--text-light);
+            color: var(--text-muted);
             cursor: pointer;
             padding: 4px;
             border-radius: 4px;
@@ -411,6 +418,7 @@
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             line-height: 1.5;
             font-family: var(--font-serif);
@@ -455,11 +463,12 @@
         }
 
         .delete-btn {
-            color: var(--text-light);
+            color: var(--text-muted);
         }
 
         .delete-btn:hover {
             color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .back-btn {
@@ -520,7 +529,7 @@
             gap: 4px;
             padding: 8px 12px;
             margin-bottom: 24px;
-            background: var(--bg-sidebar); /* Fixed from hardcoded #fafafa */
+            background: var(--bg-sidebar);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             flex-wrap: wrap;
@@ -574,35 +583,33 @@
             color: var(--text-main);
         }
 
-        /* --- ContentEditable specific styles --- */
-        .editor-body[contenteditable="true"].is-empty:before {
-            content: attr(data-placeholder);
-            color: var(--text-light);
-            pointer-events: none;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .editor-body p { margin-bottom: 1.2em; }
-        .editor-body h1, .editor-body h2, .editor-body h3 {
+        /* --- Quill Editor Overrides --- */
+        .ql-container.ql-snow {
+            border: none;
+            font-family: var(--font-serif);
+            font-size: 20px;
             color: var(--text-main);
-            font-weight: 700;
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-            line-height: 1.2;
-            font-family: var(--font-sans);
+            padding: 0;
+            overflow-y: visible;
         }
-        .editor-body h1 { font-size: 34px; letter-spacing: -0.01em; }
-        .editor-body h2 { font-size: 24px; letter-spacing: -0.01em; }
-        .editor-body h3 { font-size: 20px; }
-        .editor-body ul, .editor-body ol {
-            margin-bottom: 1.2em;
-            padding-left: 2em;
+        .ql-editor {
+            padding: 0;
+            line-height: 1.58;
+            min-height: 300px;
         }
-        .editor-body ul { list-style-type: disc; }
-        .editor-body ol { list-style-type: decimal; }
-        .editor-body blockquote {
+        .ql-editor.ql-blank::before {
+            color: var(--text-light);
+            font-style: normal;
+            left: 0;
+            right: 0;
+        }
+        
+        /* Content Formatting */
+        .ql-editor h1 { font-size: 34px; letter-spacing: -0.01em; margin-top: 1.5em; margin-bottom: 0.5em; font-family: var(--font-sans); }
+        .ql-editor h2 { font-size: 24px; letter-spacing: -0.01em; margin-top: 1.5em; margin-bottom: 0.5em; font-family: var(--font-sans); }
+        .ql-editor h3 { font-size: 20px; margin-top: 1.5em; margin-bottom: 0.5em; font-family: var(--font-sans); }
+        .ql-editor p { margin-bottom: 1.2em; }
+        .ql-editor blockquote {
             border-left: 3px solid var(--text-main);
             padding-left: 20px;
             color: var(--text-main);
@@ -610,12 +617,7 @@
             margin: 1.5em 0;
             font-size: 21px;
         }
-
-        .editor-body a {
-            color: #3b82f6;
-            text-decoration: underline;
-            cursor: pointer;
-        }
+        .ql-editor a { color: #3b82f6; text-decoration: underline; cursor: pointer; }
 
         /* --- Empty State --- */
         .empty-state {
@@ -1059,12 +1061,7 @@
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg>
                 </button>
             </div>
-            <div
-                    id="note-content"
-                    class="editor-body custom-scrollbar"
-                    contenteditable="true"
-                    data-placeholder="Start typing..."
-            ></div>
+            <div id="note-content" class="editor-body custom-scrollbar"></div>
         </div>
     </div>
 
@@ -1097,6 +1094,8 @@
     </div>
 </div>
 
+
+
 <!-- Link Modal -->
 <div id="link-modal" class="modal-overlay" style="display: none;">
     <div class="modal">
@@ -1119,19 +1118,28 @@
     let activeNoteId = null;
     let searchQuery = '';
     let noteToDeleteId = null;
+    let quill = null;
+    let isProgrammaticChange = false;
     let savedSelectionRange = null;
-    let isResettingContent = false;
 
-    // --- Local Storage Helpers ---
-    function loadData() {
+    // --- Database Helpers ---
+    async function loadData() {
         try {
-            const saved = localStorage.getItem('minimalist_notes');
-            if (saved) {
-                notes = JSON.parse(saved);
+            const idbSaved = await localforage.getItem('minimalist_notes');
+            if (idbSaved) {
+                notes = idbSaved;
+                return;
+            }
+            
+            const legacySaved = localStorage.getItem('minimalist_notes');
+            if (legacySaved) {
+                notes = JSON.parse(legacySaved);
+                await localforage.setItem('minimalist_notes', notes);
+                localStorage.removeItem('minimalist_notes');
                 return;
             }
         } catch (e) {
-            console.warn("Local storage access blocked or failed. Using memory only.");
+            console.warn("Local storage access blocked or failed. Using memory only.", e);
         }
 
         // First time visit: Create a blank note automatically
@@ -1145,9 +1153,12 @@
 
     function saveData() {
         try {
-            localStorage.setItem('minimalist_notes', JSON.stringify(notes));
+            localforage.setItem('minimalist_notes', notes).catch(e => {
+                showToast("Storage full or failed! Could not save.");
+                console.warn(e);
+            });
         } catch (e) {
-            // Ignore storage errors in restricted sandboxes
+            console.warn(e);
         }
     }
 
@@ -1166,12 +1177,26 @@
     };
 
     // --- Formatting ---
+    function escapeHtml(unsafe) {
+        if (!unsafe) return "";
+        return unsafe
+            .toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     function stripHtml(html) {
         if (!html) return "";
-        let tmp = document.createElement("DIV");
-        // Replace block tags with newlines to ensure separation
-        tmp.innerHTML = html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n');
-        return tmp.textContent.trim() || "";
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n'), 'text/html');
+            return doc.body.textContent.trim() || "";
+        } catch (e) {
+            return "";
+        }
     }
 
     function formatDate(timestamp) {
@@ -1205,7 +1230,7 @@
             return `
                     <div onclick="setActiveNote('${note.id}')" class="note-item ${isActive ? 'active' : ''}">
                         <div class="note-header">
-                            <h3 class="note-title">${note.title || 'Untitled'}</h3>
+                            <h3 class="note-title">${escapeHtml(note.title) || 'Untitled'}</h3>
                             <div class="note-header-actions">
                                 <span class="note-date">${formatDate(note.lastModified)}</span>
                                 <div onclick="openDeleteModal('${note.id}', event)" class="sidebar-delete-btn" title="Delete Note">
@@ -1219,11 +1244,7 @@
         }).join('');
     }
 
-    function updatePlaceholderVisibility() {
-        const content = els.noteContent.innerHTML.trim();
-        const isEmpty = content === '<p><br></p>' || content === '<p></p>' || content === '';
-        els.noteContent.classList.toggle('is-empty', isEmpty);
-    }
+
 
     function renderEditor() {
         const activeNote = notes.find(n => n.id === activeNoteId);
@@ -1234,14 +1255,22 @@
 
             // Only update values if they differ to prevent cursor jumping
             if (els.noteTitle.value !== activeNote.title) els.noteTitle.value = activeNote.title;
-            if (els.noteContent.innerHTML !== activeNote.content) els.noteContent.innerHTML = activeNote.content;
+            if (quill && quill.root.innerHTML !== activeNote.content) {
+                isProgrammaticChange = true;
+                quill.clipboard.dangerouslyPasteHTML(activeNote.content || '');
+                isProgrammaticChange = false;
+            }
 
             els.lastEdited.textContent = `Edited ${formatDate(activeNote.lastModified)}`;
         } else {
             els.activeNoteView.style.display = 'none';
             els.emptyState.style.display = 'flex';
             els.noteTitle.value = '';
-            els.noteContent.innerHTML = '';
+            if (quill) {
+                isProgrammaticChange = true;
+                quill.setText('');
+                isProgrammaticChange = false;
+            }
             document.body.classList.remove('sidebar-collapsed');
 
             // Update empty state text based on whether any notes exist at all
@@ -1254,7 +1283,7 @@
             }
         }
 
-        updatePlaceholderVisibility();
+
 
         // Mobile toggle class
         document.body.classList.toggle('mobile-editor-open', !!activeNoteId);
@@ -1265,10 +1294,65 @@
         document.body.classList.toggle('sidebar-collapsed');
     };
 
+
+
     window.formatDoc = function(cmd, value = null) {
-        document.execCommand(cmd, false, value);
-        els.noteContent.focus();
-        handleInput('content', els.noteContent.innerHTML);
+        if (!quill) return;
+        if (cmd === 'formatBlock') {
+            if (value === 'P') { quill.format('header', false); quill.format('blockquote', false); }
+            else if (value === 'H1') quill.format('header', 1);
+            else if (value === 'H2') quill.format('header', 2);
+            else if (value === 'H3') quill.format('header', 3);
+            else if (value === 'BLOCKQUOTE') quill.format('blockquote', true);
+        } else if (cmd === 'bold' || cmd === 'italic' || cmd === 'underline') {
+            const currentFormat = quill.getFormat();
+            quill.format(cmd, !currentFormat[cmd]);
+        } else if (cmd === 'insertUnorderedList') {
+            quill.format('list', 'bullet');
+        } else if (cmd === 'insertOrderedList') {
+            quill.format('list', 'ordered');
+        } else if (cmd === 'justifyLeft') {
+            quill.format('align', false);
+        } else if (cmd === 'justifyCenter') {
+            quill.format('align', 'center');
+        } else if (cmd === 'justifyRight') {
+            quill.format('align', 'right');
+        }
+        quill.focus();
+    };
+
+    window.openLinkModal = function() {
+        if (!quill) return;
+        const selection = quill.getSelection();
+        savedSelectionRange = selection || { index: quill.getLength() - 1, length: 0 };
+        els.linkUrlInput.value = '';
+        document.getElementById('link-modal').style.display = 'flex';
+        setTimeout(() => els.linkUrlInput.focus(), 50);
+    };
+
+    window.closeLinkModal = function() {
+        document.getElementById('link-modal').style.display = 'none';
+        savedSelectionRange = null;
+    };
+
+    window.confirmLink = function() {
+        let url = els.linkUrlInput.value.trim();
+        document.getElementById('link-modal').style.display = 'none';
+
+        if (url && savedSelectionRange && quill) {
+            quill.focus();
+            if (!/^https?:\/\//i.test(url) && !url.startsWith('mailto:')) {
+                url = 'http://' + url;
+            }
+            if (savedSelectionRange.length === 0) {
+               quill.insertText(savedSelectionRange.index, url, 'link', url);
+               quill.setSelection(savedSelectionRange.index + url.length);
+            } else {
+               quill.formatText(savedSelectionRange.index, savedSelectionRange.length, 'link', url);
+               quill.setSelection(savedSelectionRange.index, savedSelectionRange.length);
+            }
+        }
+        savedSelectionRange = null;
     };
 
     window.setActiveNote = function(id) {
@@ -1314,64 +1398,7 @@
         document.getElementById('delete-modal').style.display = 'none';
     };
 
-    window.openLinkModal = function() {
-        // Save current selection so it isn't lost when modal is clicked
-        const selection = window.getSelection();
-        if (selection.rangeCount > 0) {
-            savedSelectionRange = selection.getRangeAt(0);
-        } else {
-            savedSelectionRange = null;
-        }
 
-        els.linkUrlInput.value = '';
-        document.getElementById('link-modal').style.display = 'flex';
-        setTimeout(() => els.linkUrlInput.focus(), 50);
-    };
-
-    window.closeLinkModal = function() {
-        document.getElementById('link-modal').style.display = 'none';
-        savedSelectionRange = null;
-    };
-
-    window.confirmLink = function() {
-        let url = els.linkUrlInput.value.trim();
-        document.getElementById('link-modal').style.display = 'none';
-
-        if (url && savedSelectionRange) {
-            els.noteContent.focus();
-
-            // If no text was highlighted, insert the URL as text
-            if (savedSelectionRange.collapsed) {
-                const textNode = document.createTextNode(url);
-                savedSelectionRange.insertNode(textNode);
-                savedSelectionRange.selectNode(textNode);
-            }
-
-            // Restore the exact text selection
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(savedSelectionRange);
-
-            // Ensure proper formatting (adds http if missing)
-            if (!/^https?:\/\//i.test(url) && !url.startsWith('mailto:')) {
-                url = 'http://' + url;
-            }
-
-            document.execCommand('createLink', false, url);
-
-            // Force new links to open in a new tab
-            const links = els.noteContent.querySelectorAll('a');
-            links.forEach(link => {
-                if (!link.hasAttribute('target')) {
-                    link.setAttribute('target', '_blank');
-                    link.setAttribute('rel', 'noopener noreferrer');
-                }
-            });
-
-            handleInput('content', els.noteContent.innerHTML);
-        }
-        savedSelectionRange = null;
-    };
 
     window.confirmDelete = function() {
         if (!noteToDeleteId) return;
@@ -1390,26 +1417,45 @@
         window.print();
     };
 
-    window.copyActiveNote = function() {
+    window.copyActiveNote = async function() {
         if (!activeNoteId) return;
         const note = notes.find(n => n.id === activeNoteId);
         if (!note) return;
 
-        // Create a hidden temporary element to safely hold the rich-text
+        const title = escapeHtml(note.title) || 'Untitled Note';
+        const htmlContent = `<h1>${title}</h1><br/>${note.content}`;
+        const plainTextContent = `${note.title || 'Untitled Note'}\n\n${stripHtml(note.content)}`;
+
+        try {
+            // Modern Async Clipboard API
+            if (navigator.clipboard && window.ClipboardItem) {
+                const blobHtml = new Blob([htmlContent], { type: "text/html" });
+                const blobText = new Blob([plainTextContent], { type: "text/plain" });
+                const item = new ClipboardItem({
+                    "text/html": blobHtml,
+                    "text/plain": blobText
+                });
+                await navigator.clipboard.write([item]);
+                showToast("Copied to clipboard!");
+                return;
+            }
+        } catch (e) {
+            console.warn("Async clipboard failed, attempting fallback.", e);
+        }
+
+        // Legacy Fallback
         const tempDiv = document.createElement("div");
         tempDiv.style.position = "absolute";
         tempDiv.style.left = "-9999px";
-        tempDiv.innerHTML = `<h1>${note.title || 'Untitled Note'}</h1><br/>${note.content}`;
+        tempDiv.innerHTML = htmlContent;
         document.body.appendChild(tempDiv);
 
-        // Select the content within the temporary element
         const range = document.createRange();
         range.selectNodeContents(tempDiv);
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
 
-        // Execute copy
         try {
             document.execCommand('copy');
             showToast("Copied to clipboard!");
@@ -1418,7 +1464,6 @@
             showToast("Failed to copy text");
         }
 
-        // Clean up
         selection.removeAllRanges();
         document.body.removeChild(tempDiv);
     };
@@ -1465,40 +1510,13 @@
     });
 
     els.noteTitle.addEventListener('input', (e) => handleInput('title', e.target.value));
-    els.noteContent.addEventListener('input', (e) => {
-        if (isResettingContent) {
-            return;
-        }
 
-        const content = els.noteContent.innerHTML.trim();
-        if (content === '' || content === '<br>') {
-            isResettingContent = true;
-            // Restore the base paragraph and place the cursor in it
-            els.noteContent.innerHTML = '<p><br></p>';
-            const p = els.noteContent.firstChild;
-            if (p) {
-                const range = document.createRange();
-                const sel = window.getSelection();
-                range.setStart(p, 0);
-                range.collapse(true);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-            isResettingContent = false;
-        }
-
-        handleInput('content', els.noteContent.innerHTML);
-        updatePlaceholderVisibility();
-    });
-
-    // Listener for the link modal enter key
     els.linkUrlInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Stop any default form submission behavior
             window.confirmLink();
         }
     });
-
     // --- Init ---
     function initTheme() {
         const savedTheme = localStorage.getItem('minimalist_theme');
@@ -1516,13 +1534,33 @@
         document.getElementById('sun-icon').style.display = isDark ? 'block' : 'none';
     };
 
-    try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch(e) {}
+    function initQuill() {
+        quill = new Quill('#note-content', {
+            theme: 'snow',
+            placeholder: 'Start typing...',
+            modules: {
+                toolbar: false
+            }
+        });
+
+        quill.on('text-change', function(delta, oldDelta, source) {
+            if (!isProgrammaticChange) {
+                handleInput('content', quill.root.innerHTML);
+            }
+        });
+    }
 
     initTheme();
-    loadData();
-    activeNoteId = notes.length > 0 ? notes[0].id : null;
-    renderSidebar();
-    renderEditor();
+    initQuill();
+    
+    async function initApp() {
+        await loadData();
+        activeNoteId = notes.length > 0 ? notes[0].id : null;
+        renderSidebar();
+        renderEditor();
+    }
+    
+    initApp();
 
 </script>
 </body>
