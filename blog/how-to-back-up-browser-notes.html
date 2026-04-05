@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="How to back up notes saved in your browser. Export, copy, and protect notes from localStorage before clearing data or switching devices.">
+    <meta name="description" content="How to back up notes saved in your browser. Export, copy, and protect notes from your offline IndexedDB before clearing data or switching devices.">
     <meta name="theme-color" content="#242424">
     <link rel="canonical" href="https://notethepoint.online/blog/how-to-back-up-browser-notes.html">
     <title>How to Back Up Browser Notes | NoteThePoint Blog</title>
@@ -80,16 +80,16 @@
         <h1 class="article-title">How to Back Up Browser Notes</h1>
 
         <div class="article-body">
-            <p>Notes saved in your browser (via localStorage) stay on your device—until you clear site data, uninstall the browser, or switch computers. Here's how to back them up so you don't lose them.</p>
+            <p>Notes saved in your browser (via IndexedDB) stay on your device—until you clear site data, uninstall the browser, or switch computers. Here's how to back them up so you don't lose them.</p>
 
             <h2>1. Copy and paste</h2>
-            <p>The simplest backup: open each note, select all (Ctrl+A or Cmd+A), and paste into a text file, Word doc, or another app. Works for any notepad. For apps like <a href="../">NoteThePoint</a>, use the Copy button in the toolbar to grab the full note (title + content) in one go. Paste into a file and save it somewhere safe—desktop, Documents, or cloud storage.</p>
+            <p>The simplest backup: open each note, select all (Ctrl+A or Cmd+A), and paste into a text file, Word doc, or another app. Works for any notepad. For our <a href="../" title="Free Online Notepad">Free Online Notepad</a>, use the Copy button in the toolbar to grab the full note (title + content) in one go. Paste into a file and save it somewhere safe—desktop, Documents, or cloud storage.</p>
 
             <h2>2. Print to PDF</h2>
             <p>If the notepad supports printing, open the note and use your browser's Print function (Ctrl+P). Choose "Save as PDF" instead of a physical printer. You'll get a readable file you can store anywhere. NoteThePoint includes a print option for the active note.</p>
 
             <h2>3. Use browser DevTools (manual export)</h2>
-            <p>Many browser-based notepads store data under a key like <code>minimalist_notes</code> or similar in localStorage. Open DevTools (F12), go to Application (Chrome) or Storage (Firefox), find Local Storage for the site, and copy the value. It's usually JSON—you can save it as a .json file. To restore later, you'd need to paste it back (some apps support import; others don't).</p>
+            <p>Modern browser-based notepads utilize unlimited <strong>IndexedDB</strong> architecture. Open DevTools (F12), go to Application (Chrome) or Storage (Firefox), find IndexedDB for the site, and verify the arrays. Because they are structured database entries, it's safer to use the application's built-in print or copy formats rather than pulling the raw arrays manually.</p>
 
             <h2>4. Regular backup habit</h2>
             <p>Set a reminder—weekly or monthly—to export important notes. Even a quick copy-paste into a folder can save you if you ever clear data or lose the device. For critical content, consider moving it to a cloud note app or a file you sync (Dropbox, Google Drive, etc.) for automatic backup.</p>
@@ -98,7 +98,7 @@
             <p>Don't assume "I'll remember to export later." Browser data can disappear overnight if you clear cookies, reinstall, or get a new device. If it matters, back it up now.</p>
 
             <div class="cta-box">
-                <p><strong>Need a notepad with Copy &amp; Print?</strong> <a href="../" class="cta-link">Try NoteThePoint →</a></p>
+                <p><strong>Need a notepad with Copy &amp; Print?</strong> <a href="../" class="cta-link" title="Free Online Notepad">Try the NoteThePoint Online Notepad →</a></p>
             </div>
         </div>
 
