@@ -530,6 +530,29 @@
             color: var(--text-light);
         }
 
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .save-indicator {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+        }
+
         /* --- Rich Text Toolbar --- */
         .rich-toolbar {
             display: flex;
@@ -1070,6 +1093,13 @@
                 </button>
             </div>
             <div id="note-content" class="editor-body custom-scrollbar"></div>
+            <div class="editor-footer">
+                <span class="save-indicator" id="save-indicator">
+                    <svg width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+                    Auto-saved
+                </span>
+                <span class="word-count" id="word-count">0 words | 0 characters</span>
+            </div>
         </div>
     </div>
 
@@ -1159,9 +1189,24 @@
         }];
     }
 
+    // Debounce the visual indicator so it doesn't flash on every keystroke
+    let saveIndicatorTriggerTimeout = null;
+
     function saveData() {
         try {
-            localforage.setItem('minimalist_notes', notes).catch(e => {
+            localforage.setItem('minimalist_notes', notes).then(() => {
+                const indicator = document.getElementById('save-indicator');
+                if (indicator) {
+                    clearTimeout(saveIndicatorTriggerTimeout);
+                    saveIndicatorTriggerTimeout = setTimeout(() => {
+                        indicator.classList.add('visible');
+                        clearTimeout(window.saveIndicatorHideTimeout);
+                        window.saveIndicatorHideTimeout = setTimeout(() => {
+                            indicator.classList.remove('visible');
+                        }, 2000);
+                    }, 1000); // Wait 1 second after typing stops to show 'Auto-saved'
+                }
+            }).catch(e => {
                 showToast("Storage full or failed! Could not save.");
                 console.warn(e);
             });
@@ -1254,6 +1299,18 @@
 
 
 
+    function updateWordCount() {
+        if (!quill) return;
+        const text = quill.getText().trim();
+        const words = text.length > 0 ? text.split(/\s+/).length : 0;
+        const characters = text.replace(/\n/g, '').length;
+        
+        const countEl = document.getElementById('word-count');
+        if (countEl) {
+            countEl.textContent = `${words} words | ${characters} characters`;
+        }
+    }
+
     function renderEditor() {
         const activeNote = notes.find(n => n.id === activeNoteId);
 
@@ -1270,6 +1327,7 @@
             }
 
             els.lastEdited.textContent = `Edited ${formatDate(activeNote.lastModified)}`;
+            updateWordCount();
         } else {
             els.activeNoteView.style.display = 'none';
             els.emptyState.style.display = 'flex';
@@ -1555,6 +1613,7 @@
             if (!isProgrammaticChange) {
                 handleInput('content', quill.root.innerHTML);
             }
+            updateWordCount();
         });
     }
 
