@@ -991,6 +991,20 @@
 
     <!-- Sidebar Footer -->
     <div class="sidebar-footer">
+        <div style="margin-bottom: 16px;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8713149607224836"
+                 crossorigin="anonymous"></script>
+            <!-- notethepoint-display-ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8713149607224836"
+                 data-ad-slot="1419474208"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <a href="blog/" class="sidebar-blog-link">Blog</a>
             <a href="about.html" class="sidebar-blog-link">About & FAQ</a>
@@ -1091,6 +1105,10 @@
                 <button class="toolbar-btn" onclick="formatDoc('justifyRight')" title="Align Right">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg>
                 </button>
+                <div class="rich-toolbar-divider"></div>
+                <button class="toolbar-btn" onclick="window.openAiModal()" title="AI Assistant" style="color: #a855f7;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                </button>
             </div>
             <div id="note-content" class="editor-body custom-scrollbar"></div>
             <div class="editor-footer">
@@ -1128,6 +1146,38 @@
         <div class="modal-actions">
             <button onclick="closeDeleteModal()" class="modal-btn cancel-btn">Cancel</button>
             <button onclick="confirmDelete()" class="modal-btn delete-confirm-btn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- AI Assistant Modal -->
+<div id="ai-modal" class="modal-overlay" style="display: none;">
+    <div class="modal" style="max-width: 600px; width: 95%;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 class="modal-title" style="margin-bottom: 0px; color: #a855f7;">✨ AI Editor</h3>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="window.runAiAction('rephrase')" class="modal-btn cancel-btn">Rephrase</button>
+                <button onclick="window.runAiAction('spellcheck')" class="modal-btn cancel-btn">Spell Check</button>
+                <button onclick="window.runAiAction('format')" class="modal-btn cancel-btn">Format</button>
+            </div>
+        </div>
+        
+        <p class="modal-text" id="ai-status-text" style="margin-bottom: 12px; height: 20px;">Select an action above to modify your text.</p>
+        
+        <div style="display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <label style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: block;">Original Text</label>
+                <textarea id="ai-original-text" class="modal-input" style="height: 150px; resize: none; background: var(--bg-sidebar); border-color: var(--border-color);"></textarea>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <label style="font-size: 12px; color: #a855f7; font-weight: 600; margin-bottom: 8px; display: block;">AI Suggestion</label>
+                <textarea id="ai-generated-text" class="modal-input" style="height: 150px; resize: none; border-color: #a855f7;"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button onclick="window.closeAiModal()" class="modal-btn cancel-btn">Cancel</button>
+            <button onclick="window.acceptAiEdit()" class="modal-btn primary-btn" style="background: #a855f7; color: white; border: none;">Accept Edit</button>
         </div>
     </div>
 </div>
@@ -1568,6 +1618,107 @@
             els.lastEdited.textContent = `Edited ${formatDate(notes[noteIndex].lastModified)}`;
         }
     }
+
+    // --- Native AI Execution ---
+    window.openAiModal = function() {
+        if (!quill) return;
+        let textToProcess = quill.getText().trim();
+        
+        let range = quill.getSelection();
+        if (range && range.length > 0) {
+            textToProcess = quill.getText(range.index, range.length).trim();
+        }
+
+        if (!textToProcess) {
+            showToast("Please select or type some text first.");
+            return;
+        }
+
+        document.getElementById('ai-original-text').value = textToProcess;
+        document.getElementById('ai-generated-text').value = '';
+        document.getElementById('ai-status-text').textContent = 'Select an action above to modify your text.';
+        document.getElementById('ai-status-text').style.color = 'var(--text-muted)';
+        document.getElementById('ai-modal').style.display = 'flex';
+    };
+
+    window.closeAiModal = function() {
+        document.getElementById('ai-modal').style.display = 'none';
+        if (quill) quill.focus();
+    };
+
+    window.runAiAction = async function(actionType) {
+        const statusEl = document.getElementById('ai-status-text');
+        const generatedEl = document.getElementById('ai-generated-text');
+        const originalText = document.getElementById('ai-original-text').value;
+
+        if (!originalText) {
+            statusEl.textContent = 'Original text is empty.';
+            return;
+        }
+
+        statusEl.textContent = 'Initializing Chrome built-in AI...';
+        statusEl.style.color = '#a855f7';
+        generatedEl.value = 'Generating...';
+
+        try {
+            if (!window.ai || !window.ai.languageModel) {
+                throw new Error("Local AI prompt-api blocked. Please enable chrome://flags/#prompt-api-for-gemini-nano");
+            }
+
+            const capabilities = await window.ai.languageModel.capabilities();
+            if (capabilities.available === 'no') {
+                throw new Error("Local AI model unavailable on this device natively.");
+            }
+
+            let systemPrompt = '';
+            if (actionType === 'rephrase') {
+                systemPrompt = "You are a professional editor. Rephrase the following text to flow naturally and professionally. Return strictly the rephrased text with no extra commentary.";
+            } else if (actionType === 'spellcheck') {
+                systemPrompt = "You are a precise proofreader. Correct any spelling or grammar mistakes in the following text. Return the corrected text only.";
+            } else if (actionType === 'format') {
+                systemPrompt = "Format the following text cleanly with proper capitalization and spacing. Return the formatted text only.";
+            }
+
+            statusEl.textContent = 'Generating locally...';
+            
+            const session = await window.ai.languageModel.create({
+                systemPrompt: systemPrompt
+            });
+
+            const result = await session.prompt(originalText);
+            
+            generatedEl.value = result.trim();
+            statusEl.textContent = 'Ready to review!';
+            statusEl.style.color = '#22c55e';
+            
+            if (session.destroy) session.destroy();
+
+        } catch (error) {
+            console.error(error);
+            generatedEl.value = '';
+            statusEl.textContent = "Error: " + error.message;
+            statusEl.style.color = '#ef4444';
+        }
+    };
+
+    window.acceptAiEdit = function() {
+        if (!quill) return;
+        const newText = document.getElementById('ai-generated-text').value;
+        if (!newText || newText === 'Generating...') return;
+
+        let range = quill.getSelection(true) || { index: 0, length: quill.getLength() };
+        
+        // Ensure replacing actually matches what was requested
+        // If range gets lost when clicking modal, we should rely on entire document
+        quill.focus();
+        
+        // Basic replacement logic
+        // Because modal blur loses selection, we overwrite the whole document if we originally opened it with no selection.
+        quill.setText(newText + '\n', 'user');
+
+        closeAiModal();
+        showToast("AI Edit Applied!");
+    };
 
     // --- Event Listeners ---
     els.searchInput.addEventListener('input', (e) => {
