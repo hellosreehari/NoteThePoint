@@ -656,10 +656,96 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
+            color: var(--text-main);
             background: var(--bg-main);
             height: 100%;
+            overflow-y: auto;
+            padding: 48px 24px;
+        }
+
+        .landing-container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding-bottom: 64px;
+        }
+
+        .landing-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .landing-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .landing-section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            letter-spacing: -0.01em;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .landing-section p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            font-family: var(--font-serif);
+        }
+
+        .landing-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .landing-feature-card {
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .landing-feature-card h4 {
+            font-size: 18px;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            color: var(--text-main);
+        }
+
+        .landing-feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .landing-blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .landing-blog-link {
+            font-size: 16px;
+            color: #3b82f6;
+            text-decoration: underline;
+            font-family: var(--font-serif);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .empty-icon-wrapper {
@@ -1120,17 +1206,66 @@
     </div>
 
     <!-- Empty State -->
-    <div id="empty-state" class="empty-state">
-        <div class="empty-icon-wrapper">
-            <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-        </div>
-        <h2 class="empty-title">Welcome to your free online notepad</h2>
-        <p class="empty-desc">Create your first secure note below.</p>
-        <div style="display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap;">
-            <button onclick="handleAddNote()" class="create-btn">
-                Create Note
-            </button>
-            <a href="blog/" class="empty-state-blog-link">Read our blog</a>
+    <div id="empty-state" class="empty-state custom-scrollbar">
+        <div class="landing-container">
+            <div class="landing-hero">
+                <div class="empty-icon-wrapper">
+                    <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </div>
+                <h2 class="empty-title" style="font-size: 32px; letter-spacing: -0.02em; margin-bottom: 12px; font-family: var(--font-sans); font-weight: 800;">Welcome to NoteThePoint</h2>
+                <p class="empty-desc" style="font-size: 18px; margin-bottom: 32px; max-width: 600px;">A fast, secure, and distraction-free online notepad. Start writing instantly without creating an account.</p>
+                <div style="display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="handleAddNote()" class="create-btn" style="font-size: 16px; padding: 12px 32px;">
+                        Create a Free Note
+                    </button>
+                </div>
+            </div>
+
+            <div class="landing-section">
+                <h2>Why choose NoteThePoint?</h2>
+                <p>NoteThePoint is designed to be the ultimate offline-capable productivity tool running completely in your browser. Unlike other note-taking applications that require sign-ups, subscriptions, or enforce arbitrary limits, this application functions beautifully without compromising your privacy.</p>
+                <p>Whether you're writing a blog post draft, keeping a daily journal, or just copying and pasting formatted content, our minimalist Rich Text Editor ensures the technology stays out of your way.</p>
+            </div>
+
+            <div class="landing-section">
+                <h2>Features</h2>
+                <div class="landing-features-grid">
+                    <div class="landing-feature-card">
+                        <h4>100% Privacy Focused</h4>
+                        <p>All data is stored purely locally inside your browser's IndexedDB. We have no backend servers, meaning your content is physically impossible for us or anyone else to read.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h4>No Sign-Up Required</h4>
+                        <p>Don't waste time remembering passwords. NoteThePoint is friction-free; jump straight into the application and start typing immediately.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h4>Distraction-Free Aesthetics</h4>
+                        <p>Beautiful typography optimized for focus, coupled with an instant Dark Mode toggle for writing comfortably in any lighting environment.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h4>Powerful Rich Text</h4>
+                        <p>An integrated, headless formatting toolbar enables seamless bold, italic, headings, lists, and links without cluttering the screen.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="landing-section" style="margin-top: 16px;">
+                <h2>From Our Blog</h2>
+                <div class="landing-blog-list">
+                    <a href="blog/why-notes-shouldnt-need-account.html" class="landing-blog-link">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        Why your notes app shouldn't require an account
+                    </a>
+                    <a href="blog/where-are-notes-saved-browser-vs-cloud.html" class="landing-blog-link">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        Browser Storage vs Cloud: Where are your notes really saved?
+                    </a>
+                    <a href="blog/how-to-back-up-browser-notes.html" class="landing-blog-link">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        How to safely back up your locally stored notes
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
