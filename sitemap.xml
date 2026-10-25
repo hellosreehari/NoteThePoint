@@ -2,68 +2,110 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://notethepoint.online/</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>weekly</changefreq>
+      <priority>0.9</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/markdown-vs-rich-text-notepad.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/indexeddb-browser-storage-explained.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/student-note-taking-strategies-digital-age.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/data-privacy-laws-and-browser-notes.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/distraction-free-writing-guide.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/how-to-organize-unstructured-notes.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/faster-than-notion-no-sign-in.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/best-free-online-notepad-2026.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/why-notes-shouldnt-need-account.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/online-notepad-without-sign-up.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/where-are-notes-saved-browser-vs-cloud.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/blog/how-to-back-up-browser-notes.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-   <url>
-      <loc>https://notethepoint.online/blog/faster-than-notion-no-sign-in.html</loc>
-      <lastmod>2026-02-22</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/about.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
+      <priority>0.7</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/contact.html</loc>
+      <lastmod>2026-10-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/privacy.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
+      <priority>0.6</priority>
    </url>
    <url>
       <loc>https://notethepoint.online/terms.html</loc>
-      <lastmod>2026-02-22</lastmod>
+      <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
+      <priority>0.6</priority>
    </url>
 </urlset>

@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools from NoteThePoint.">
+    <meta name="description" content="In-depth guides, technical analyses, and strategies on privacy-first note-taking, local-first web storage, and distraction-free productivity from NoteThePoint.">
     <meta name="theme-color" content="#242424">
     <link rel="canonical" href="https://notethepoint.online/blog/">
-    <title>Blog | NoteThePoint</title>
+    <title>Blog & Technical Guides | NoteThePoint</title>
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-    <meta property="og:title" content="Blog | NoteThePoint">
-    <meta property="og:description" content="Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools.">
+    <meta property="og:title" content="Blog & Technical Guides | NoteThePoint">
+    <meta property="og:description" content="In-depth guides, technical analyses, and strategies on privacy-first note-taking, local storage, and distraction-free productivity.">
     <meta property="og:url" content="https://notethepoint.online/blog/">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://notethepoint.online/og-image.png">
+    <meta name="google-adsense-account" content="ca-pub-8713149607224836">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8713149607224836" crossorigin="anonymous"></script>
     <style>
         :root {
             --bg-main: #ffffff;
@@ -19,10 +22,10 @@
             --border-color: #f0f0f0;
             --text-main: #242424;
             --text-muted: #6b6b6b;
-            --text-light: #d4d4d4;
+            --text-light: #8e8e8e;
             --accent-hover: #f5f5f5;
             --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.1);
-            --note-title-color: #525252;
+            --note-title-color: #171717;
             --btn-primary-bg: #242424;
             --btn-primary-text: #ffffff;
             --btn-primary-hover: #262626;
@@ -37,10 +40,10 @@
             --border-color: #2e2e2e;
             --text-main: #e5e5e5;
             --text-muted: #a3a3a3;
-            --text-light: #525252;
+            --text-light: #737373;
             --accent-hover: #262626;
             --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.8);
-            --note-title-color: #d4d4d4;
+            --note-title-color: #ffffff;
             --btn-primary-bg: #e5e5e5;
             --btn-primary-text: #121212;
             --btn-primary-hover: #d4d4d4;
@@ -54,13 +57,14 @@
             color: var(--text-main);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
         }
         ::selection {
             background: var(--selection-bg);
             color: var(--selection-text);
         }
         .blog-container {
-            max-width: 680px;
+            max-width: 760px;
             margin: 0 auto;
             padding: 48px 24px;
         }
@@ -119,70 +123,131 @@
         }
         .blog-title {
             font-size: 42px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
         }
         .blog-intro {
             font-size: 18px;
             color: var(--text-muted);
-            line-height: 1.58;
-            margin-bottom: 48px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        .categories-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .cat-pill {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 99px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .cat-pill:hover, .cat-pill.active {
+            color: var(--text-main);
+            background: var(--accent-hover);
+            border-color: var(--text-muted);
         }
         .post-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
         .post-card {
             display: block;
             text-decoration: none;
             color: inherit;
-            padding: 16px 24px;
-            border: 1px solid transparent;
+            padding: 20px 24px;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            background: transparent;
-            transition: all 0.2s;
+            background: var(--bg-main);
+            transition: all 0.2s ease;
         }
         .post-card:hover {
-            background: var(--accent-hover);
-            border-color: var(--border-color);
+            background: var(--bg-sidebar);
+            border-color: #3b82f6;
             box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
         }
-        .post-date {
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--text-light);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .post-tag {
+            color: #2563eb;
+            font-weight: 700;
+        }
+        body.dark-theme .post-tag {
+            color: #60a5fa;
         }
         .post-title {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            line-height: 1.3;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.35;
             color: var(--note-title-color);
+            letter-spacing: -0.01em;
         }
         .post-card:hover .post-title {
-            color: var(--text-main);
+            color: #2563eb;
+        }
+        body.dark-theme .post-card:hover .post-title {
+            color: #60a5fa;
         }
         .post-excerpt {
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-muted);
-            line-height: 1.5;
-            font-family: var(--font-serif);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.55;
+            font-family: var(--font-sans);
         }
-        footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-color); display: flex; gap: 16px; flex-wrap: wrap; }
-        footer a { color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 500; opacity: 0.8; }
-        footer a:hover { color: var(--text-main); opacity: 1; }
+        .ad-container {
+            margin: 28px 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 90px;
+            background: var(--bg-sidebar);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        footer a:hover {
+            color: var(--text-main);
+        }
     </style>
-    <meta name="google-adsense-account" content="ca-pub-8713149607224836">
 </head>
 <body>
     <div class="blog-container">
@@ -190,47 +255,123 @@
             <a href="../" class="blog-logo">notethepoint<span class="tld">.online</span></a>
             <nav class="blog-nav">
                 <a href="../">Notepad</a>
-                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn" aria-label="Toggle theme">
                     <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
-                <a href="../" class="cta" title="Free Online Notepad">Start your free online notepad</a>
+                <a href="../" class="cta" title="Free Online Notepad">Open Notepad</a>
             </nav>
         </header>
 
-        <h1 class="blog-title">Blog</h1>
-        <p class="blog-intro">Tips, guides, and thoughts on note-taking, productivity, and privacy-first tools.</p>
+        <h1 class="blog-title">Articles & Engineering Guides</h1>
+        <p class="blog-intro">Original deep-dives, architectural breakdowns, and cognitive productivity frameworks curated by the NoteThePoint team.</p>
+
+        <div class="categories-nav">
+            <span class="cat-pill active">All Topics</span>
+            <span class="cat-pill">Privacy & Architecture</span>
+            <span class="cat-pill">Note-Taking Systems</span>
+            <span class="cat-pill">Productivity Science</span>
+        </div>
 
         <div class="post-list">
+            <!-- 1. Markdown vs Rich Text -->
+            <a href="markdown-vs-rich-text-notepad.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Formatting</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">Markdown vs. Rich Text: Which Note-Taking System Boosts True Productivity?</h2>
+                <p class="post-excerpt">Compare syntax friction, export portability, cognitive flow, and keyboard ergonomics to determine whether Markdown or visual Rich Text suits your drafting style best.</p>
+            </a>
+
+            <!-- 2. IndexedDB Architecture -->
+            <a href="indexeddb-browser-storage-explained.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Architecture</span> • October 2026 • 8 Min Read</div>
+                <h2 class="post-title">How Web Browsers Store Data Locally: IndexedDB vs. LocalStorage Explained</h2>
+                <p class="post-excerpt">An architectural deep-dive into browser client-side storage engines, transactional integrity, quota eviction algorithms, and zero-knowledge privacy.</p>
+            </a>
+
+            <!-- 3. Student Note-Taking -->
+            <a href="student-note-taking-strategies-digital-age.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Learning</span> • October 2026 • 8 Min Read</div>
+                <h2 class="post-title">Student Note-Taking Strategies for the Digital Age: Cornell, Outlining & Zettelkasten</h2>
+                <p class="post-excerpt">Overcome cognitive overload and digital distractions in lectures using scientifically validated note-taking frameworks and minimal browser tools.</p>
+            </a>
+
+            <!-- 4. Data Privacy Laws -->
+            <a href="data-privacy-laws-and-browser-notes.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Privacy</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">Data Privacy Laws and Your Notes: Why Zero-Knowledge Architecture Matters</h2>
+                <p class="post-excerpt">How GDPR, CCPA, and AI corporate ingestion policies affect personal note privacy, and why client-side data sovereignty is the ultimate legal shield.</p>
+            </a>
+
+            <!-- In-List AdSense Unit -->
+            <div class="ad-container">
+                <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Advertisement</span>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-8713149607224836"
+                     data-ad-slot="1419474208"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <!-- 5. Distraction-Free Writing -->
+            <a href="distraction-free-writing-guide.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Focus</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">The Distraction-Free Writing Environment: Cognitive Science & Practical Setup</h2>
+                <p class="post-excerpt">Reduce attention residue and cognitive fatigue by eliminating interface clutter, modal interruptions, and endless customization rabbit holes.</p>
+            </a>
+
+            <!-- 6. Organizing Unstructured Notes -->
+            <a href="how-to-organize-unstructured-notes.html" class="post-card">
+                <div class="post-meta"><span class="post-tag">Workflows</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">How to Organize Unstructured Notes: From Digital Hoarding to Actionable Clarity</h2>
+                <p class="post-excerpt">A systematic triage protocol to transform messy meeting snippets, scratchpads, and brain dumps into structured knowledge without folder overload.</p>
+            </a>
+
+            <!-- 7. Faster Than Notion -->
             <a href="faster-than-notion-no-sign-in.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">Faster Than Notion: Why You Don't Always Need a Workspace</h2>
-                <p class="post-excerpt">Notion is a powerhouse, but sometimes it's overkill. Here's why a lightweight, no-sign-in notepad is faster for daily captures.</p>
+                <div class="post-meta"><span class="post-tag">Comparison</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">Faster Than Notion: Why You Don't Always Need an All-in-One Workspace</h2>
+                <p class="post-excerpt">Notion is powerful, but heavy databases and loading spin wheels introduce friction. Discover when a rapid no-sign-in scratchpad saves hours of productive time.</p>
             </a>
+
+            <!-- 8. Best Free Online Notepad 2026 -->
             <a href="best-free-online-notepad-2026.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">Best Free Online Notepad in 2026</h2>
-                <p class="post-excerpt">A roundup of the best browser-based notepads for quick notes, from minimal and privacy-first to feature-rich—and how to pick the right one.</p>
+                <div class="post-meta"><span class="post-tag">Reviews</span> • October 2026 • 8 Min Read</div>
+                <h2 class="post-title">Best Free Online Notepad in 2026: An Exhaustive Comparison</h2>
+                <p class="post-excerpt">A comprehensive benchmark of browser-based notepads evaluating zero-sign-up access, local privacy, rich text capabilities, and export fidelity.</p>
             </a>
+
+            <!-- 9. Why Notes Shouldn't Need Account -->
             <a href="why-notes-shouldnt-need-account.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">Why Your Notes Shouldn't Need an Account</h2>
-                <p class="post-excerpt">Most note apps demand your email before you can write a single word. Here's why that's unnecessary—and what to use instead.</p>
+                <div class="post-meta"><span class="post-tag">Privacy</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">Why Your Notes Shouldn't Need an Account: Privacy, Speed & Peace of Mind</h2>
+                <p class="post-excerpt">Examine the dark patterns of mandatory account registration, identity tracking, and how client-side web technologies restore autonomy to your writing.</p>
             </a>
+
+            <!-- 10. Online Notepad Without Sign-Up -->
             <a href="online-notepad-without-sign-up.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">Online Notepad Without Sign-Up: 5 Privacy-First Options</h2>
-                <p class="post-excerpt">5 privacy-first online notepads you can use without signing up. No email, no account—just open and start typing.</p>
+                <div class="post-meta"><span class="post-tag">Privacy</span> • October 2026 • 8 Min Read</div>
+                <h2 class="post-title">Online Notepad Without Sign-Up: 5 Privacy-First Tools for 2026</h2>
+                <p class="post-excerpt">Discover five privacy-conscious online notepads you can open and use immediately without registering, remembering passwords, or handing over personal data.</p>
             </a>
+
+            <!-- 11. Where Are Notes Saved -->
             <a href="where-are-notes-saved-browser-vs-cloud.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">Where Are My Notes Saved? Browser vs Cloud Storage</h2>
-                <p class="post-excerpt">A plain-language guide to browser storage vs cloud storage—and what it means for your privacy.</p>
+                <div class="post-meta"><span class="post-tag">Storage</span> • October 2026 • 9 Min Read</div>
+                <h2 class="post-title">Where Are My Notes Saved? Browser vs Cloud Storage Explained</h2>
+                <p class="post-excerpt">An architectural breakdown comparing browser client-side storage (IndexedDB) with remote multi-tenant cloud synchronization and their security implications.</p>
             </a>
+
+            <!-- 12. How to Back Up Browser Notes -->
             <a href="how-to-back-up-browser-notes.html" class="post-card">
-                <div class="post-date">February 2026</div>
-                <h2 class="post-title">How to Back Up Browser Notes</h2>
-                <p class="post-excerpt">Export, copy, and protect notes from your offline IndexedDB before clearing data or switching devices.</p>
+                <div class="post-meta"><span class="post-tag">Data Safety</span> • October 2026 • 7 Min Read</div>
+                <h2 class="post-title">How to Back Up Browser Notes: Complete Guide to Exporting IndexedDB</h2>
+                <p class="post-excerpt">Step-by-step strategies to export, copy, and safeguard your browser notes before clearing browsing cookies, updating browsers, or changing machines.</p>
             </a>
         </div>
 
@@ -238,6 +379,7 @@
             <a href="../about.html">About & FAQ</a>
             <a href="../privacy.html">Privacy Policy</a>
             <a href="../terms.html">Terms of Service</a>
+            <a href="../contact.html">Contact Us</a>
             <a href="../blog/">Blog</a>
         </footer>
     </div>

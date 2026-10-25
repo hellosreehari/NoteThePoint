@@ -3,11 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About NoteThePoint. Learn why we built a serverless notepad and find answers to common questions about storage and privacy.">
+    <meta name="description" content="About NoteThePoint. Meet the team, discover our privacy-first philosophy, and learn how we engineer high-speed, serverless browser tools.">
     <meta name="theme-color" content="#242424">
     <link rel="canonical" href="https://notethepoint.online/about.html">
-    <title>About & FAQ | NoteThePoint</title>
+    <title>About Us, Editorial Standards & FAQ | NoteThePoint</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="About NoteThePoint - Mission, Team & Standards">
+    <meta property="og:description" content="Learn why we built a zero-login, serverless online notepad and our editorial standards for privacy-first productivity.">
+    <meta property="og:url" content="https://notethepoint.online/about.html">
+    <meta property="og:image" content="https://notethepoint.online/og-image.png">
+    <meta property="og:type" content="website">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About NoteThePoint",
+      "url": "https://notethepoint.online/about.html",
+      "description": "Information about NoteThePoint, our zero-login client-side architecture, and editorial principles.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "NoteThePoint",
+        "url": "https://notethepoint.online",
+        "founder": {
+          "@type": "Person",
+          "name": "Sreehari A",
+          "jobTitle": "Lead Developer & System Architect",
+          "sameAs": "https://github.com/hellosreehari"
+        }
+      }
+    }
+    </script>
     <style>
         :root {
             --bg-main: #ffffff;
@@ -58,6 +83,26 @@
         .content ul { margin-bottom: 1.5em; padding-left: 1.5em; }
         .content li { margin-bottom: 0.5em; }
         .content a { color: #3b82f6; text-decoration: underline; }
+        .author-box {
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 2em 0;
+            font-family: var(--font-sans);
+        }
+        .author-box h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: var(--text-main);
+        }
+        .author-box p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-family: var(--font-sans);
+        }
         footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-color); display: flex; gap: 16px; flex-wrap: wrap; }
         footer a { color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 500; opacity: 0.8; }
         footer a:hover { color: var(--text-main); opacity: 1; }
@@ -71,7 +116,9 @@
             <div class="nav-links">
                 <a href="/">Notepad</a>
                 <a href="/blog/">Blog</a>
-                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn">
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn" aria-label="Toggle Dark Mode">
                     <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
@@ -80,35 +127,56 @@
 
         <h1>About NoteThePoint</h1>
         <div class="content">
-            <p>NoteThePoint was born out of a simple need: a place to type right now, without waiting for a heavy app to load or being forced to sign in.</p>
-            <p>We believe that tools should be fast, private, and out of your way. That's why NoteThePoint is entirely serverless—your data never leaves your device.</p>
+            <p>NoteThePoint was born out of a simple, urgent realization: modern software has become bloated, slow, and needlessly intrusive. What should be the most straightforward task on a computer—jotting down a phone number, organizing meeting thoughts, or drafting an essay—often requires downloading a multi-gigabyte application, creating a cloud account, verifying emails, and agreeing to track personal data across servers.</p>
+
+            <p>We built NoteThePoint to prove a different path: software should be fast, elegant, distraction-free, and fundamentally private. Your thoughts should belong strictly to you.</p>
+
+            <h2>Meet the Creator &amp; Engineering Philosophy</h2>
+            <div class="author-box">
+                <h3>Sreehari A — Founder &amp; Lead Engineer</h3>
+                <p>Sreehari is a software engineer passionate about local-first software, web performance optimization, and privacy-respecting digital tools. With experience building scalable web architectures and frontend systems, he launched NoteThePoint as an open initiative to give users an instant, distraction-free scratchpad with zero tracking of notes.</p>
+                <p>Connect on <a href="https://github.com/hellosreehari/NoteThePoint" target="_blank" rel="noopener noreferrer">GitHub</a> or reach out at <a href="mailto:contact@notethepoint.online">contact@notethepoint.online</a>.</p>
+            </div>
+
+            <h2>Our Technical Architecture: Local-First &amp; Zero-Knowledge</h2>
+            <p>Traditional note applications store your personal writing on centralized cloud servers. This exposes notes to data leaks, corporate tracking, and accidental data mining. NoteThePoint uses a <strong>zero-knowledge, client-side architecture</strong>:</p>
+            <ul>
+                <li><strong>Browser IndexedDB Persistence:</strong> We leverage the browser's native IndexedDB storage engine via localForage. This eliminates the traditional 5MB LocalStorage limit and allows tens of thousands of notes to be stored reliably without touching an external server.</li>
+                <li><strong>No Login Wall:</strong> You never have to log in. The moment you open the URL, your session is ready in milliseconds.</li>
+                <li><strong>Complete Offline Operation:</strong> Even if your internet connection disconnects, NoteThePoint continues to edit, format, and save your notes without error.</li>
+            </ul>
+
+            <h2>Editorial Standards &amp; Content Integrity</h2>
+            <p>Our companion publication at <a href="/blog/">NoteThePoint Blog</a> produces in-depth guides, technical tutorials, and comparative evaluations covering modern productivity, storage architecture, and data privacy. To maintain the highest quality for our readers:</p>
+            <ul>
+                <li><strong>Authentic Research:</strong> Every article is researched and written by human software engineers and productivity specialists. We do not publish auto-generated, low-effort synthetic filler.</li>
+                <li><strong>Hands-On Testing:</strong> When reviewing note apps or storage models, we perform real-world benchmark tests measuring launch latency, memory footprint, and data recovery resilience.</li>
+                <li><strong>Ongoing Maintenance:</strong> We routinely audit our guides to ensure all technical advice, code examples, and security recommendations remain up-to-date with current web standards.</li>
+            </ul>
 
             <h2>Frequently Asked Questions</h2>
 
-            <h3>Is it really free?</h3>
-            <p>Yes. NoteThePoint is completely free to use. No hidden subscriptions, no paid tiers.</p>
+            <h3>Is NoteThePoint really completely free?</h3>
+            <p>Yes. NoteThePoint is 100% free to use. There are no paid tiers, hidden paywalls, or locked features. We sustain our infrastructure through unobtrusive advertisements on our educational blog pages.</p>
 
-            <h3>Where are my notes stored?</h3>
-            <p>Your notes are stored locally in your browser using <strong>IndexedDB</strong>. This means they are saved securely on your device, and they are never sent to a server.</p>
+            <h3>Where are my notes physically stored?</h3>
+            <p>Your notes are saved in your local browser profile inside your device's <strong>IndexedDB</strong> storage. They live directly on your hard drive or phone memory, never on our servers.</p>
 
-            <h3>What happens if I clear my browser history?</h3>
-            <p>If you choose to "Clear browsing data" and include "Cookies and other site data," your notes will be deleted. We recommend regularly backing up important notes by copying them to another location.</p>
+            <h3>What happens if I clear my browser history or site data?</h3>
+            <p>If you perform a full browser wipe that includes "Cookies and other site data" or offline storage, your notes will be erased. We strongly advise using the one-click "Copy to Clipboard" utility or printing your notes to PDF for permanent offline archiving.</p>
 
-            <h3>Can I access my notes on another device?</h3>
-            <p>No. Since the data stays on your device, it doesn't automatically sync between your phone and your laptop. This is a trade-off we made to ensure total privacy and zero-login speed.</p>
+            <h3>Can I sync my notes across multiple devices?</h3>
+            <p>Because NoteThePoint intentionally operates without a backend database or user accounts, automatic cross-device syncing does not occur. This deliberate design decision guarantees complete data isolation and immediate speed.</p>
 
-            <h3>How do I back up my notes?</h3>
-            <p>The easiest way is to use the "Copy to Clipboard" button on any note and paste it into a safe place. You can also print your notes or save them as PDFs using the print icon.</p>
-
-            <h2>Feedback & Contact</h2>
-            <p>Have a question, a bug report, or a feature request? We'd love to hear from you.</p>
-            <p>You can follow our project on <a href="https://github.com/hellosreehari/NoteThePoint">GitHub</a>.</p>
+            <h2>Contact &amp; Feedback</h2>
+            <p>Have questions, security disclosures, or feature suggestions? Visit our <a href="/contact.html">Contact Us</a> page or drop us an email at <a href="mailto:contact@notethepoint.online">contact@notethepoint.online</a>.</p>
         </div>
 
         <footer>
             <a href="/about.html">About & FAQ</a>
             <a href="/privacy.html">Privacy Policy</a>
             <a href="/terms.html">Terms of Service</a>
+            <a href="/contact.html">Contact Us</a>
             <a href="/blog/">Blog</a>
         </footer>
     </div>

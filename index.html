@@ -804,6 +804,152 @@
             color: var(--text-main);
         }
 
+        /* --- Landing Page Components --- */
+        .landing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-family: var(--font-sans);
+            font-size: 14px;
+        }
+
+        .landing-table th, .landing-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            text-align: left;
+        }
+
+        .landing-table th {
+            background: var(--bg-sidebar);
+            font-weight: 600;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .faq-item {
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .faq-item h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: var(--font-sans);
+            color: var(--text-main);
+        }
+
+        .faq-item p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin: 0;
+            font-family: var(--font-sans);
+        }
+
+        .ad-container {
+            margin: 28px 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 90px;
+            background: var(--bg-sidebar);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .landing-guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .guide-card {
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .guide-card:hover {
+            border-color: #3b82f6;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .guide-meta {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #2563eb;
+        }
+
+        body.dark-theme .guide-meta {
+            color: #60a5fa;
+        }
+
+        .guide-title {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+        }
+
+        .guide-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-family: var(--font-sans);
+        }
+
+        .landing-footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .landing-footer-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .landing-footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .landing-footer-links a:hover {
+            color: var(--text-main);
+        }
+
         /* --- Modal --- */
         .modal-overlay {
             position: fixed;
@@ -1093,6 +1239,7 @@
             <a href="about.html" class="sidebar-blog-link">About & FAQ</a>
             <a href="privacy.html" class="sidebar-blog-link">Privacy</a>
             <a href="terms.html" class="sidebar-blog-link">Terms</a>
+            <a href="contact.html" class="sidebar-blog-link">Contact</a>
         </div>
     </div>
 </div>
@@ -1206,59 +1353,193 @@
                 <div class="empty-icon-wrapper">
                     <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                 </div>
-                <h2 class="empty-title" style="font-size: 32px; letter-spacing: -0.02em; margin-bottom: 12px; font-family: var(--font-sans); font-weight: 800;">Welcome to NoteThePoint</h2>
-                <p class="empty-desc" style="font-size: 18px; margin-bottom: 32px; max-width: 600px;">A fast, secure, and distraction-free online notepad. Start writing instantly without creating an account.</p>
+                <h1 class="empty-title" style="font-size: 34px; letter-spacing: -0.03em; margin-bottom: 12px; font-family: var(--font-sans); font-weight: 800; line-height: 1.25;">NoteThePoint: Free, Private Online Notepad</h1>
+                <p class="empty-desc" style="font-size: 17px; margin-bottom: 28px; max-width: 620px; line-height: 1.6;">A fast, secure, and distraction-free online notepad. Start writing instantly in your browser with zero sign-up friction and offline IndexedDB persistence.</p>
                 <div style="display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="handleAddNote()" class="create-btn" style="font-size: 16px; padding: 12px 32px;">
-                        Create a Free Note
+                    <button onclick="handleAddNote()" class="create-btn" style="font-size: 15px; padding: 12px 32px; font-weight: 600;">
+                        Create a Free Note Now →
                     </button>
                 </div>
             </div>
 
             <div class="landing-section">
-                <h2>Why choose NoteThePoint?</h2>
-                <p>NoteThePoint is designed to be the ultimate offline-capable productivity tool running completely in your browser. Unlike other note-taking applications that require sign-ups, subscriptions, or enforce arbitrary limits, this application functions beautifully without compromising your privacy.</p>
-                <p>Whether you're writing a blog post draft, keeping a daily journal, or just copying and pasting formatted content, our minimalist Rich Text Editor ensures the technology stays out of your way.</p>
+                <h2>Local-First Data Sovereignty: How It Works</h2>
+                <p>Most modern productivity software treats user thoughts as raw data to be harvested, centralized, and scanned for machine learning or advertising profiles. NoteThePoint was engineered on a fundamentally different philosophy: <strong>client-side data sovereignty</strong>.</p>
+                <p>When you draft or organize notes here, your content never crosses a network boundary. Everything is committed directly to your browser's sandboxed <strong>IndexedDB</strong> storage engine. There are no tracking scripts, no remote database synchronization pipelines, and no sign-up barriers. You own your words completely, operating with the speed of an air-gapped desktop editor and the convenience of the open web.</p>
             </div>
 
             <div class="landing-section">
-                <h2>Features</h2>
+                <h2>Architecture & Feature Comparison</h2>
+                <p>See how NoteThePoint compares to traditional pastebins and heavy cloud workspace suites:</p>
+                <table class="landing-table">
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th>NoteThePoint</th>
+                            <th>Traditional Pastebins</th>
+                            <th>Cloud Suites (Notion / Keep)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Account Required</strong></td>
+                            <td>No — 100% Free & Open</td>
+                            <td>No (Public links)</td>
+                            <td>Mandatory Email / OAuth</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Storage Engine</strong></td>
+                            <td>Local Browser IndexedDB</td>
+                            <td>Remote Plaintext DB</td>
+                            <td>Centralized Cloud Cloud DB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Privacy</strong></td>
+                            <td>Zero-Knowledge (On-Device)</td>
+                            <td>Public or Server-Scraped</td>
+                            <td>Corporate Access & AI Scanning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Offline Availability</strong></td>
+                            <td>Instant Full Fidelity</td>
+                            <td>None (Online Only)</td>
+                            <td>Partial / Sync Required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Speed to Write</strong></td>
+                            <td>&lt; 50 Milliseconds</td>
+                            <td>Fast</td>
+                            <td>Slow (Multi-MB Bundle Loading)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Formatting</strong></td>
+                            <td>Rich Text & Shortcuts</td>
+                            <td>Raw Text / Plain</td>
+                            <td>Blocks / Database Fields</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="landing-section">
+                <h2>Built for Speed, Privacy & Simplicity</h2>
                 <div class="landing-features-grid">
                     <div class="landing-feature-card">
-                        <h4>100% Privacy Focused</h4>
-                        <p>All data is stored purely locally inside your browser's IndexedDB. We have no backend servers, meaning your content is physically impossible for us or anyone else to read.</p>
+                        <h4>100% Zero-Knowledge Privacy</h4>
+                        <p>All data is stored purely locally inside your browser's IndexedDB. We have no remote user databases, meaning your notes are mathematically impossible for us or anyone else to read.</p>
                     </div>
                     <div class="landing-feature-card">
-                        <h4>No Sign-Up Required</h4>
-                        <p>Don't waste time remembering passwords. NoteThePoint is friction-free; jump straight into the application and start typing immediately.</p>
+                        <h4>Frictionless Instant Access</h4>
+                        <p>Don't waste focus remembering passwords or navigating 2FA codes. Open NoteThePoint and your cursor is ready to write in milliseconds.</p>
                     </div>
                     <div class="landing-feature-card">
                         <h4>Distraction-Free Aesthetics</h4>
-                        <p>Beautiful typography optimized for focus, coupled with an instant Dark Mode toggle for writing comfortably in any lighting environment.</p>
+                        <p>Clean typography optimized for cognitive clarity, coupled with an instant Dark Mode toggle for comfortable writing in any environment.</p>
                     </div>
                     <div class="landing-feature-card">
-                        <h4>Powerful Rich Text</h4>
-                        <p>An integrated, headless formatting toolbar enables seamless bold, italic, headings, lists, and links without cluttering the screen.</p>
+                        <h4>Powerful Rich Text Toolbar</h4>
+                        <p>An integrated, headless formatting toolbar enables seamless bold, italic, headings, bulleted lists, and links with standard keyboard shortcuts.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h4>Sub-Millisecond Search</h4>
+                        <p>Search across hundreds of local notes with instant debounce filtering. Find any past thought or snippet without leaving your browser tab.</p>
+                    </div>
+                    <div class="landing-feature-card">
+                        <h4>One-Click Export & Print</h4>
+                        <p>Easily copy plain text or generate clean, distraction-free PDF documents using the built-in print dialog for safe physical and digital archiving.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="landing-section" style="margin-top: 16px;">
-                <h2>From Our Blog</h2>
-                <div class="landing-blog-list">
-                    <a href="blog/why-notes-shouldnt-need-account.html" class="landing-blog-link">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                        Why your notes app shouldn't require an account
+            <!-- In-Content AdSense Placement -->
+            <div class="ad-container">
+                <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Advertisement</span>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-8713149607224836"
+                     data-ad-slot="1419474208"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <div class="landing-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>Where are my notes actually stored?</h4>
+                        <p>Your notes are stored directly on your personal device using your web browser's built-in IndexedDB database. Nothing is sent to our servers or stored in any remote cloud system.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Will my notes still be here if I close the tab or computer?</h4>
+                        <p>Yes! Browser IndexedDB is persistent storage. When you close the tab, exit your browser, or shut down your machine, your notes remain securely stored in your browser profile.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What happens if I clear my browser history or site data?</h4>
+                        <p>If you perform a complete wipe of "Cookies and Site Data" in browser settings, your local browser storage will be emptied. We strongly recommend using the Print or Copy buttons to back up critical documents before clearing your browser data.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I use NoteThePoint without an internet connection?</h4>
+                        <p>Yes. Once loaded, NoteThePoint's core interface runs locally. Because storage is handled on your physical device, you can draft, format, and search notes even in airplane mode or during network outages.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Why is NoteThePoint completely free to use?</h4>
+                        <p>We believe basic thinking and writing tools should be open, accessible, and respectful of user privacy. We sustain server hosting and maintenance through non-intrusive display advertising rather than paywalls or selling personal information.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="landing-section">
+                <h2>Productivity Guides & Technical Articles</h2>
+                <p>Read our engineering guides on local-first storage, privacy laws, and note-taking science:</p>
+                <div class="landing-guides-grid">
+                    <a href="blog/markdown-vs-rich-text-notepad.html" class="guide-card">
+                        <span class="guide-meta">Formatting Guide</span>
+                        <h3 class="guide-title">Markdown vs. Rich Text: Which Boosts True Productivity?</h3>
+                        <p class="guide-desc">Compare syntax friction, export portability, and keyboard ergonomics for modern drafting.</p>
                     </a>
-                    <a href="blog/where-are-notes-saved-browser-vs-cloud.html" class="landing-blog-link">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                        Browser Storage vs Cloud: Where are your notes really saved?
+                    <a href="blog/indexeddb-browser-storage-explained.html" class="guide-card">
+                        <span class="guide-meta">Architecture</span>
+                        <h3 class="guide-title">How Web Browsers Store Data: IndexedDB Explained</h3>
+                        <p class="guide-desc">An architectural deep-dive into client-side LevelDB/SQLite engines and zero-knowledge privacy.</p>
                     </a>
-                    <a href="blog/how-to-back-up-browser-notes.html" class="landing-blog-link">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                        How to safely back up your locally stored notes
+                    <a href="blog/student-note-taking-strategies-digital-age.html" class="guide-card">
+                        <span class="guide-meta">Learning Systems</span>
+                        <h3 class="guide-title">Student Note-Taking Strategies for the Digital Age</h3>
+                        <p class="guide-desc">Applying Cornell, Outlining, and Zettelkasten methods with lightweight digital tools.</p>
+                    </a>
+                    <a href="blog/data-privacy-laws-and-browser-notes.html" class="guide-card">
+                        <span class="guide-meta">Privacy Laws</span>
+                        <h3 class="guide-title">Data Privacy Laws and Your Notes</h3>
+                        <p class="guide-desc">How GDPR, CCPA, and AI ingestion policies affect personal note privacy.</p>
+                    </a>
+                    <a href="blog/distraction-free-writing-guide.html" class="guide-card">
+                        <span class="guide-meta">Focus & Ergonomics</span>
+                        <h3 class="guide-title">The Distraction-Free Writing Environment</h3>
+                        <p class="guide-desc">Reduce attention residue and cognitive fatigue by eliminating interface clutter.</p>
+                    </a>
+                    <a href="blog/where-are-notes-saved-browser-vs-cloud.html" class="guide-card">
+                        <span class="guide-meta">Data Storage</span>
+                        <h3 class="guide-title">Browser Storage vs Cloud: Where Are Notes Saved?</h3>
+                        <p class="guide-desc">A plain-language comparison of local disk transactions versus remote cloud synchronization.</p>
                     </a>
                 </div>
+                <div style="margin-top: 12px; text-align: center;">
+                    <a href="blog/" class="empty-state-blog-link" style="font-size: 15px; font-weight: 600; color: #2563eb;">Explore all 12 articles in our blog archive →</a>
+                </div>
+            </div>
+
+            <div class="landing-footer">
+                <div class="landing-footer-links">
+                    <a href="about.html">About & Editorial Standards</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="blog/">Blog</a>
+                </div>
+                <div>NoteThePoint is an independent, client-side web utility developed by Sreehari A. Built on open web standards with zero tracking cookies.</div>
             </div>
         </div>
     </div>
@@ -1323,14 +1604,8 @@
             console.warn("Local storage access blocked or failed. Using memory only.", e);
         }
 
-        // First time visit: Create a blank note automatically
-        notes = [{
-            id: Date.now().toString() + Math.random().toString(36).substring(2),
-            title: '',
-            content: '<p><br></p>',
-            lastModified: Date.now()
-        }];
-        saveData();
+        // First time visit: start with empty notes so visitors and search crawlers see the full rich guide
+        notes = [];
     }
 
     // Debounce the visual indicator so it doesn't flash on every keystroke
@@ -1420,7 +1695,11 @@
         const filtered = getFilteredNotes();
 
         if (filtered.length === 0) {
-            els.notesList.innerHTML = `<div class="empty-notes">No notes found.</div>`;
+            if (notes.length === 0) {
+                els.notesList.innerHTML = `<div class="empty-notes" style="padding: 24px 16px; text-align: center;"><p style="margin-bottom: 12px; color: var(--text-muted); font-size: 13px;">No notes yet.</p><button onclick="handleAddNote()" class="create-btn" style="font-size: 13px; padding: 8px 18px;">+ New Note</button></div>`;
+            } else {
+                els.notesList.innerHTML = `<div class="empty-notes">No matching notes.</div>`;
+            }
             return;
         }
 
@@ -1489,12 +1768,14 @@
             document.body.classList.remove('sidebar-collapsed');
 
             // Update empty state text based on whether any notes exist at all
-            if (notes.length === 0) {
-                els.emptyTitle.textContent = "Welcome to your free online notepad";
-                els.emptyDesc.textContent = "Create your first secure note below to get started.";
-            } else {
-                els.emptyTitle.textContent = "No note selected in your notepad";
-                els.emptyDesc.textContent = "Choose a note from the sidebar or create a new one.";
+            if (els.emptyTitle && els.emptyDesc) {
+                if (notes.length === 0) {
+                    els.emptyTitle.textContent = "NoteThePoint: Free, Private Online Notepad";
+                    els.emptyDesc.textContent = "A fast, secure, and distraction-free online notepad. Start writing instantly in your browser with zero sign-up friction and offline IndexedDB persistence.";
+                } else {
+                    els.emptyTitle.textContent = "No note currently selected";
+                    els.emptyDesc.textContent = "Choose a note from the sidebar or click Create a Free Note to start writing.";
+                }
             }
         }
 
