@@ -42,4 +42,28 @@
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
    </url>
+   <url>
+      <loc>https://notethepoint.online/blog/faster-than-notion-no-sign-in.html</loc>
+      <lastmod>2026-02-22</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/about.html</loc>
+      <lastmod>2026-02-22</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/privacy.html</loc>
+      <lastmod>2026-02-22</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/terms.html</loc>
+      <lastmod>2026-02-22</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+   </url>
 </urlset>
