@@ -103,6 +103,12 @@
       <priority>0.7</priority>
    </url>
    <url>
+      <loc>https://notethepoint.online/blog/etextpad-vs-notethepoint-comparison.html</loc>
+      <lastmod>2026-11-05</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
       <loc>https://notethepoint.online/privacy.html</loc>
       <lastmod>2026-10-25</lastmod>
       <changefreq>monthly</changefreq>
