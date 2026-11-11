@@ -11,18 +11,25 @@
 
         gtag('config', 'G-HHEPJNNV42');
     </script>
-    <!-- Google tag (gtag.js) event helper -->
+    <!-- Google tag (gtag.js) event - delayed navigation helper -->
     <script>
       function trackNoteEvent(eventName, params) {
         if (typeof gtag === 'function') {
-          gtag('event', eventName || 'create_a_note', params || {});
+          gtag('event', eventName || 'create_note_new', params || {});
         }
       }
+      // Helper function to delay opening a URL until a gtag event is sent.
+      // Call it in response to an action that should navigate to a URL.
       function gtagSendEvent(url) {
-        trackNoteEvent('create_a_note');
-        if (typeof url === 'string') {
-          window.location = url;
-        }
+        var callback = function () {
+          if (typeof url === 'string') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'create_note_new', {
+          'event_callback': callback,
+          'event_timeout': 2000,
+        });
         return false;
       }
     </script>
@@ -1881,7 +1888,7 @@
     }
 
     window.handleAddNote = function() {
-        trackNoteEvent('create_a_note');
+        trackNoteEvent('create_note_new');
         const newNote = {
             id: Date.now().toString() + Math.random().toString(36).substring(2),
             title: '',
@@ -2014,7 +2021,7 @@
             const isContentEmpty = content === '' || content === '<p><br></p>' || content === '<p></p>';
 
             if (note.title.trim() !== '' && !isContentEmpty && !note.hasBeenTracked) {
-                trackNoteEvent('create_a_note');
+                trackNoteEvent('create_note_new');
                 notes[noteIndex].hasBeenTracked = true;
             }
 
