@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8713149607224836" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How long do browser notes stay saved? Understand IndexedDB storage quotas, Safari ITP eviction rules, Chrome persistence, and how to keep saved notes safe indefinitely.">
+    <meta name="theme-color" content="#242424">
+    <link rel="canonical" href="https://notethepoint.online/blog/how-long-do-browser-notes-stay-saved.html">
+    <title>How Long Do Browser Notes Stay Saved? Storage Limits &amp; Eviction Explained | NoteThePoint Blog</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="How Long Do Browser Notes Stay Saved? Storage Limits & Eviction Explained">
+    <meta property="og:description" content="Learn what happens to notes stored in Chrome, Safari, Edge, and Firefox over months and years—plus exact actions that can erase or protect them.">
+    <meta property="og:url" content="https://notethepoint.online/blog/how-long-do-browser-notes-stay-saved.html">
+    <meta property="og:image" content="https://notethepoint.online/og-image.png">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How Long Do Browser Notes Stay Saved? Storage Limits & Eviction Explained",
+      "description": "Learn what happens to notes stored in Chrome, Safari, Edge, and Firefox over months and years—plus exact actions that can erase or protect them.",
+      "author": {
+        "@type": "Person",
+        "name": "Sreehari A",
+        "jobTitle": "Lead Developer",
+        "url": "https://notethepoint.online/about.html"
+      },
+      "datePublished": "2026-11-25",
+      "dateModified": "2026-11-25",
+      "publisher": { "@type": "Organization", "name": "NoteThePoint", "url": "https://notethepoint.online" }
+    }
+    </script>
+    <style>
+        :root {
+            --bg-main: #ffffff;
+            --bg-sidebar: #fafafa;
+            --border-color: #f0f0f0;
+            --text-main: #242424;
+            --text-muted: #6b6b6b;
+            --text-light: #d4d4d4;
+            --accent-hover: #f5f5f5;
+            --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.1);
+            --btn-primary-bg: #242424;
+            --btn-primary-text: #ffffff;
+            --btn-primary-hover: #262626;
+            --selection-bg: #e5e5e5;
+            --selection-text: #171717;
+            --font-sans: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --font-serif: source-serif-pro, Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+        }
+        body.dark-theme {
+            --bg-main: #121212;
+            --bg-sidebar: #1a1a1a;
+            --border-color: #2e2e2e;
+            --text-main: #e5e5e5;
+            --text-muted: #a3a3a3;
+            --text-light: #525252;
+            --accent-hover: #262626;
+            --shadow-sm: 0 2px 8px -4px rgba(0,0,0,0.8);
+            --btn-primary-bg: #e5e5e5;
+            --btn-primary-text: #121212;
+            --btn-primary-hover: #d4d4d4;
+            --selection-bg: #3b3b3b;
+            --selection-text: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-sans); background: var(--bg-main); color: var(--text-main); min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        ::selection { background: var(--selection-bg); color: var(--selection-text); }
+        .article-container { max-width: 680px; margin: 0 auto; padding: 48px 24px; }
+        .article-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+        .article-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.04em; color: var(--text-main); text-decoration: none; }
+        .article-logo:hover { color: var(--text-main); }
+        .article-logo .tld { color: var(--text-muted); font-weight: 400; }
+        .article-nav-links { display: flex; gap: 16px; align-items: center; }
+        .article-nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; }
+        .article-nav-links a:hover { color: var(--text-main); }
+        .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 6px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .icon-btn:hover { color: var(--text-main); background: var(--accent-hover); }
+        .article-date { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 16px; }
+        .article-title { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 24px; }
+        .article-body { font-family: var(--font-serif); font-size: 20px; color: var(--text-main); line-height: 1.58; }
+        .article-body p { margin-bottom: 1.5em; }
+        .article-body h2 { font-family: var(--font-sans); font-size: 24px; font-weight: 600; margin-top: 2em; margin-bottom: 0.75em; }
+        .article-body h3 { font-family: var(--font-sans); font-size: 18px; font-weight: 600; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .article-body ul, .article-body ol { margin-bottom: 1.5em; padding-left: 1.5em; }
+        .article-body li { margin-bottom: 0.5em; }
+        .article-body a { color: #3b82f6; text-decoration: underline; }
+        .article-body a:hover { text-decoration: none; }
+        .article-table { width: 100%; border-collapse: collapse; margin: 2em 0; font-family: var(--font-sans); font-size: 14px; }
+        .article-table th, .article-table td { border: 1px solid var(--border-color); padding: 12px 14px; text-align: left; }
+        .article-table th { background: var(--bg-sidebar); font-weight: 600; }
+        .highlight-card { background: var(--bg-sidebar); border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 18px 20px; margin: 1.8em 0; font-family: var(--font-sans); font-size: 15px; line-height: 1.55; }
+        .ad-container { margin: 36px 0; text-align: center; overflow: hidden; min-height: 90px; background: var(--bg-sidebar); border: 1px dashed var(--border-color); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .cta-box { background: var(--bg-sidebar); border: 1px solid var(--border-color); border-radius: 10px; padding: 28px; margin: 2.5em 0; text-align: center; font-family: var(--font-sans); }
+        .cta-box h3 { margin-top: 0; margin-bottom: 10px; font-size: 20px; }
+        .cta-box p { font-size: 15px; color: var(--text-muted); margin-bottom: 18px; }
+        .cta-box .cta-link { display: inline-block; background: var(--btn-primary-bg); color: var(--btn-primary-text); padding: 10px 24px; border-radius: 99px; text-decoration: none; font-size: 14px; font-weight: 600; transition: opacity 0.2s; }
+        .cta-box .cta-link:hover { background: var(--btn-primary-hover); }
+        .back-link { display: inline-block; color: var(--text-muted); text-decoration: none; font-size: 14px; margin-top: 48px; }
+        .back-link:hover { color: var(--text-main); }
+        footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-color); display: flex; gap: 16px; flex-wrap: wrap; }
+        footer a { color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 500; opacity: 0.8; }
+        footer a:hover { color: var(--text-main); opacity: 1; }
+        @media (max-width: 600px) {
+            .article-title { font-size: 28px; }
+            .article-body { font-size: 17px; }
+            .article-table { font-size: 12px; }
+            .article-table th, .article-table td { padding: 8px 10px; }
+        }
+    </style>
+    <meta name="google-adsense-account" content="ca-pub-8713149607224836">
+</head>
+<body>
+    <article class="article-container">
+        <nav class="article-nav">
+            <a href="../" class="article-logo">notethepoint<span class="tld">.online</span></a>
+            <div class="article-nav-links">
+                <a href="../">Notepad</a>
+                <a href="index.html">Blog</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <button onclick="toggleTheme()" class="icon-btn" title="Toggle Dark Mode" id="theme-btn" aria-label="Toggle Dark Mode">
+                    <svg id="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" style="display: none;" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </nav>
+
+        <div class="article-meta" style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; font-size: 12px; color: var(--text-muted);">
+            <span class="article-date" style="font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-light);">November 2026</span>
+            <span>&bull;</span>
+            <span class="article-author">By <a href="../about.html" style="color: var(--text-muted); text-decoration: none; font-weight: 500;">Sreehari A</a></span>
+            <span>&bull;</span>
+            <span>7 min read</span>
+        </div>
+        <h1 class="article-title">How Long Do Browser Notes Stay Saved? Storage Limits &amp; Eviction Explained</h1>
+
+        <div class="article-body">
+            <p>When you write inside a no-account notepad like <a href="../" title="Free Online Notepad">NoteThePoint</a>, one question naturally comes to mind: <strong>if there's no server account holding my text, how long will my browser notes stay saved?</strong></p>
+
+            <p>In standard desktop or mobile browsers, notes stored in <strong>IndexedDB</strong> have <strong>no automatic expiration date</strong>. They survive closing tabs, quitting the browser, and rebooting your computer—often staying intact for years. However, exact persistence rules vary slightly across Chrome, Safari, Firefox, and Edge under low-disk or privacy-cleanup scenarios. Here is everything you should know about browser note storage lifespan.</p>
+
+            <h2>No Fixed Timer vs. Browser Eviction Rules</h2>
+
+            <p>Unlike HTTP cookies—which often carry explicit <code>Expires</code> or <code>Max-Age</code> headers—<a href="what-is-indexeddb-browser-database.html">IndexedDB</a> records do not come with a built-in countdown clock. Your notes stay saved on disk indefinitely unless one of three things happens:</p>
+
+            <ol>
+                <li><strong>You manually clear site data:</strong> Selecting "Cookies and other site data" (Chrome/Edge) or "Manage Website Data" (Safari/Firefox) deletes the IndexedDB database for that origin. Note that clearing only "Cached images and files" usually leaves IndexedDB untouched—though double-check your browser checkboxes before clicking clear.</li>
+                <li><strong>Severe disk pressure (Storage Eviction):</strong> If your computer's or phone's SSD/storage runs critically low, browsers follow an LRU (Least Recently Used) cleanup policy, purging storage from websites you have not visited in a long time—starting with inactive sites first.</li>
+                <li><strong>Safari's 7-day script-writable storage cap:</strong> Under Apple's Intelligent Tracking Prevention (ITP), Safari on macOS and iOS can purge client-side storage (like IndexedDB and <code>localStorage</code>) for any origin you don't interact with at all for <strong>7 consecutive days</strong>—unless the site is installed as a Home Screen web app on iOS/iPadOS.</li>
+            </ol>
+
+            <div class="highlight-card">
+                <strong>Safari Tip:</strong> If you rely on Safari for long-term browser notes on an iPhone or Mac, visit your saved notepad at least once a week—or add NoteThePoint to your iOS Home Screen—and periodically back up critical notes using Copy to Clipboard or Print to PDF.
+            </div>
+
+            <!-- Responsive AdSense In-Article Ad Unit -->
+            <div class="ad-container">
+                <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Advertisement</span>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-8713149607224836"
+                     data-ad-slot="1419474208"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <h2>Browser Storage Behavior by Platform</h2>
+
+            <table class="article-table">
+                <thead>
+                    <tr>
+                        <th>Browser / Mode</th>
+                        <th>Normal Persistence</th>
+                        <th>Disk-Space Eviction</th>
+                        <th>Recommended Backup Habit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Chrome / Edge (Desktop)</strong></td>
+                        <td>Indefinite while actively visited</td>
+                        <td>Only under severe disk pressure</td>
+                        <td>Archive critical notes monthly</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Firefox</strong></td>
+                        <td>Indefinite across restarts</td>
+                        <td>Up to dynamic origin group limits</td>
+                        <td>Keep copies of essential documents</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Safari (macOS / iOS)</strong></td>
+                        <td>Resets after 7 days of zero visits (ITP)</td>
+                        <td>Same origin limits + ITP rule</td>
+                        <td>Add to Home Screen or visit weekly</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Incognito / Private Tab</strong></td>
+                        <td>Deleted immediately when all private windows close</td>
+                        <td>Ephemeral memory/session storage</td>
+                        <td>Great for shared PCs; never rely on persistence</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>How Much Can Browser Notes Storage Hold?</h2>
+
+            <p>Older browser scratchpads used <code>localStorage</code>, which hits a hard wall at <strong>5 MB</strong> across all keys for a website. Modern tools like NoteThePoint use <strong>IndexedDB</strong>, where browsers allocate storage as a dynamic share of available disk space (often up to 60% of free disk in Chromium-based browsers and up to 50%–80% pools in Firefox/Safari depending on OS availability).</p>
+
+            <p>Even if a long rich-text note takes 20 KB, 500 MB of available IndexedDB space could store tens of thousands of detailed notes before coming anywhere near a storage ceiling.</p>
+
+            <h2>Three Habits to Make Sure You Never Lose Saved Notes</h2>
+
+            <ul>
+                <li><strong>Separate "Cached Files" from "Site Data":</strong> Whenever troubleshooting a slow website, never choose "All sites" + "Cookies and site data" unless you are prepared to erase local web app data. Instead, clear cache per site or inspect site storage individually.</li>
+                <li><strong>Use built-in Copy &amp; Print to PDF:</strong> In <a href="../" title="Free Online Notepad">NoteThePoint</a>, the top toolbar includes one-click <strong>Copy to Clipboard</strong> (preserving rich formatting as well as plain text) and <strong>Print Note</strong> (allowing clean Save-as-PDF archiving in any OS). For complete backup steps, see our <a href="how-to-back-up-browser-notes.html">browser notes backup guide</a>.</li>
+                <li><strong>Never store permanent notes in Incognito:</strong> Private browsing is engineered to leave zero trace once closed. Use it deliberately when writing sensitive temporary text on a shared computer, not for permanent storage.</li>
+            </ul>
+
+            <p>Want to see the exact architecture behind client-side vs. cloud data persistence? Read our full breakdown comparing <a href="where-are-notes-saved-browser-vs-cloud.html">where notes are saved in browser vs. cloud apps</a>.</p>
+
+            <div class="cta-box">
+                <h3>Fast, Private Notes Saved Right in Your Browser</h3>
+                <p>Open NoteThePoint to draft with rich formatting, search instantly, and keep notes locally on your own hardware.</p>
+                <a href="../" class="cta-link" title="Free Online Notepad">Open NoteThePoint Notepad &rarr;</a>
+            </div>
+        </div>
+
+        <footer>
+            <a href="../about.html">About &amp; FAQ</a>
+            <a href="../privacy.html">Privacy Policy</a>
+            <a href="../terms.html">Terms of Service</a>
+            <a href="../contact.html">Contact Us</a>
+            <a href="index.html">Blog</a>
+        </footer>
+
+        <a href="index.html" class="back-link">&larr; Back to Blog</a>
+    </article>
+    <script>
+        function initTheme() {
+            const savedTheme = localStorage.getItem('minimalist_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('moon-icon').style.display = 'none';
+                document.getElementById('sun-icon').style.display = 'block';
+            }
+        }
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('minimalist_theme', isDark ? 'dark' : 'light');
+            document.getElementById('moon-icon').style.display = isDark ? 'none' : 'block';
+            document.getElementById('sun-icon').style.display = isDark ? 'block' : 'none';
+        }
+        initTheme();
+    </script>
+</body>
+</html>

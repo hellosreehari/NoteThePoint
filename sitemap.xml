@@ -8,7 +8,7 @@
    </url>
    <url>
       <loc>https://notethepoint.online/blog/</loc>
-      <lastmod>2026-10-25</lastmod>
+      <lastmod>2026-11-25</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.9</priority>
    </url>
@@ -105,6 +105,66 @@
    <url>
       <loc>https://notethepoint.online/blog/etextpad-vs-notethepoint-comparison.html</loc>
       <lastmod>2026-11-05</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/etextpad-review-2026.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/etextpad-alternatives.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/what-is-indexeddb-browser-database.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/desktop-vs-cloud-note-apps.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/how-long-do-browser-notes-stay-saved.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/free-note-taking-websites.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/is-online-notepad-private.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/online-notepad-no-download.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/quick-notes-online.html</loc>
+      <lastmod>2026-11-25</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://notethepoint.online/blog/where-does-google-keep-store-notes.html</loc>
+      <lastmod>2026-11-25</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
